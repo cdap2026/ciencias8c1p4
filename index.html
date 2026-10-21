@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Evaluación por Competencias 8° - Tropismos y Nastias | Gimnasio Cristiano Faro de Luz</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- QRious para Código QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <!-- jsPDF para Reporte PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              900: '#081b38',
+              800: '#0d274c',
+              700: '#153866',
+            },
+            gold: {
+              500: '#c89d28',
+              400: '#deb33c',
+              600: '#a88019',
+            },
+            emerald: {
+              600: '#059669',
+              500: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+    textarea, input[type="text"], input[type="password"] {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top right, #153866 0%, #081b38 65%, #051024 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .glass-card {
+      background: rgba(13, 39, 76, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(200, 157, 40, 0.28);
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.6);
+    }
+    .glass-subcard {
+      background: rgba(8, 27, 56, 0.65);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .option-btn {
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .option-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200, 157, 40, 0.75);
+    }
+    .option-selected {
+      background: linear-gradient(135deg, rgba(200, 157, 40, 0.25) 0%, rgba(5, 150, 105, 0.25) 100%) !important;
+      border-color: #c89d28 !important;
+      box-shadow: 0 0 0 2px rgba(200, 157, 40, 0.45);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #081b38;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #153866;
+      border-radius: 4px;
+      border: 1px solid rgba(200, 157, 40, 0.4);
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;">
+
+  <!-- FRANJA DE SEGURIDAD SUPERIOR -->
+  <div class="sticky top-0 z-40 bg-navy-900/95 backdrop-blur-md border-b border-gold-500/40 px-3 py-2 shadow-lg">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Advertencia Antifraude -->
+      <div class="flex items-center gap-2 text-xs sm:text-sm font-medium text-amber-200">
+        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500/20 border border-red-400 text-red-300 animate-pulse">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+        </span>
+        <span>Supervisión Activa: <strong>-0.5 pts</strong> por cambio de pestaña o ruido &gt;60%</span>
+      </div>
+
+      <!-- Medidor de Decibeles en Vivo (Visible en Examen) -->
+      <div id="noiseWidget" class="hidden items-center gap-2 bg-navy-800/90 px-3 py-1 rounded-full border border-white/15 text-xs">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+        </svg>
+        <span class="text-slate-300">Sonómetro:</span>
+        <div class="w-20 h-2.5 bg-slate-800 rounded-full overflow-hidden border border-white/10">
+          <div id="noiseBar" class="h-full bg-emerald-500 transition-all duration-150" style="width: 8%;"></div>
+        </div>
+        <span id="noiseValueText" class="font-bold text-emerald-400">8%</span>
+      </div>
+
+      <!-- Reloj en Vivo y Botón Acceso Docente -->
+      <div class="flex items-center gap-2 sm:gap-3 ml-auto">
+        <div class="flex items-center gap-1.5 bg-navy-800 px-3 py-1 rounded-lg border border-gold-500/30 text-xs sm:text-sm text-slate-200">
+          <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span id="liveClockDisplay" class="font-mono font-semibold">Cargando...</span>
+        </div>
+
+        <button onclick="openTeacherModal()" class="inline-flex items-center gap-1.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-500 text-navy-900 font-bold text-xs sm:text-sm px-3.5 py-1.5 rounded-lg shadow-md transition transform active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+          </svg>
+          <span>Acceso Docente</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 py-6">
+
+    <!-- CABECERA CON BANNER INSTITUCIONAL -->
+    <header id="topBannerHeader" class="mb-6">
+      <div class="glass-card rounded-2xl overflow-hidden p-2 sm:p-3">
+        <img id="mainBannerImg" src="8°_CIENCIAS DE LA CREACIÓN.jpg" alt="Banner Institucional 8° Ciencias de la Creación" class="w-full h-auto rounded-xl object-cover max-h-60 mx-auto" />
+      </div>
+    </header>
+
+    <!-- PANTALLA 1: BIENVENIDA E INSTRUCCIONES -->
+    <section id="welcomeScreen" class="glass-card rounded-2xl p-5 sm:p-8 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/15 pb-5">
+        <div>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-gold-500/20 text-gold-400 border border-gold-500/40 mb-2">
+            Gimnasio Cristiano Faro de Luz • Grado 8°
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Evaluación por Competencias: Tropismos, Nastias y Práctica Experimental
+          </h1>
+          <p class="text-slate-300 text-sm mt-1">
+            Asignatura: <strong>Ciencias de la Creación (Biología)</strong> | Docente: <strong>Cristian David Ayazo</strong>
+          </p>
+        </div>
+        <div class="bg-navy-900/90 border border-emerald-500/40 rounded-xl px-4 py-3 text-right shrink-0">
+          <div class="text-xs text-slate-400 uppercase font-semibold">Estado de Programación</div>
+          <div id="scheduleStatusBadge" class="text-sm font-bold text-emerald-400 mt-0.5">
+            Horario: Acceso habilitado permanentemente
+          </div>
+          <div class="text-xs text-gold-400 font-semibold mt-1">
+            10 Cerradas (3.70 pts) + 5 Abiertas (1.30 pts) = 5.00 pts
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 TARJETAS DE EJES TEMÁTICOS -->
+      <div>
+        <h2 class="text-sm font-bold uppercase tracking-wider text-gold-400 mb-3 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          </svg>
+          Ejes Conceptuales y Experimentales a Evaluar
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Tarjeta 1 -->
+          <div class="glass-subcard rounded-xl p-4 border-l-4 border-l-emerald-500">
+            <div class="flex items-center gap-2.5 mb-2">
+              <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+              </div>
+              <h3 class="font-bold text-white text-sm">1. Tropismos y Fitohormonas</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Respuestas direccionales irreversibles de crecimiento (+ o -): fototropismo, gravitropismo, hidrotropismo y tigmotropismo regulados por la redistribución lateral de <strong>auxinas (AIA)</strong> y estatolitos.
+            </p>
+          </div>
+
+          <!-- Tarjeta 2 -->
+          <div class="glass-subcard rounded-xl p-4 border-l-4 border-l-gold-500">
+            <div class="flex items-center gap-2.5 mb-2">
+              <div class="p-2 rounded-lg bg-gold-500/20 text-gold-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                </svg>
+              </div>
+              <h3 class="font-bold text-white text-sm">2. Experimento de Tropismos</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Análisis científico del experimento realizado semanas atrás con plántulas: control de variables (independiente, dependiente e intervinientes), grupo control, etiolación y curvatura hacia la luz.
+            </p>
+          </div>
+
+          <!-- Tarjeta 3 -->
+          <div class="glass-subcard rounded-xl p-4 border-l-4 border-l-sky-400">
+            <div class="flex items-center gap-2.5 mb-2">
+              <div class="p-2 rounded-lg bg-sky-500/20 text-sky-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+              </div>
+              <h3 class="font-bold text-white text-sm">3. Nastias y Turgencia</h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Movimientos rápidos, reversibles y no direccionales (sismonastia en <em>Mimosa pudica</em>, tigmonastia en <em>Dionaea</em>, fotonastia y nictinastia) mediados por flujos de iones $K^+$ y agua en pulvinos.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUADRÍCULA CON LAS 4 REGLAS OBLIGATORIAS -->
+      <div>
+        <h2 class="text-sm font-bold uppercase tracking-wider text-gold-400 mb-3 flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          Reglas Obligatorias de la Evaluación
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs sm:text-sm">
+          <div class="glass-subcard p-3.5 rounded-xl flex items-start gap-3">
+            <div class="p-2 rounded-lg bg-amber-500/20 text-amber-300 shrink-0 mt-0.5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white">1. Tiempos Mínimos por Pregunta</h4>
+              <p class="text-slate-300 text-xs mt-0.5">
+                Cada una de las <strong>10 preguntas cerradas</strong> exige <strong>1.5 minutos (90 s)</strong> de lectura analítica, y cada una de las <strong>5 preguntas abiertas</strong> exige <strong>10 minutos (600 s)</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="glass-subcard p-3.5 rounded-xl flex items-start gap-3">
+            <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-300 shrink-0 mt-0.5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white">2. Redacción Mínima en Abiertas (4 Líneas)</h4>
+              <p class="text-slate-300 text-xs mt-0.5">
+                Las 5 preguntas abiertas requieren redactar al menos <strong>4 líneas completas y coherentes</strong> (mínimo 28 palabras con vocabulario variado y científico).
+              </p>
+            </div>
+          </div>
+
+          <div class="glass-subcard p-3.5 rounded-xl flex items-start gap-3">
+            <div class="p-2 rounded-lg bg-red-500/20 text-red-300 shrink-0 mt-0.5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white">3. Control de Pestañas y Pantalla Completa</h4>
+              <p class="text-slate-300 text-xs mt-0.5">
+                Cambiar de aplicación o pestaña descuenta <strong>-0.5 puntos</strong> automáticamente. El bloqueo natural por inactividad del celular (&gt;7.5 s) no penaliza.
+              </p>
+            </div>
+          </div>
+
+          <div class="glass-subcard p-3.5 rounded-xl flex items-start gap-3">
+            <div class="p-2 rounded-lg bg-purple-500/20 text-purple-300 shrink-0 mt-0.5">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-white">4. Sonómetro Ambiental Automático (60%)</h4>
+              <p class="text-slate-300 text-xs mt-0.5">
+                El sistema monitorea el ruido en el aula. Si el volumen alcanza o supera el <strong>60%</strong>, se aplicará una penalización automática de <strong>-0.5 puntos</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTRO DEL ESTUDIANTE E INICIO -->
+      <div class="glass-subcard rounded-2xl p-5 border border-gold-500/40 space-y-4">
+        <div>
+          <label for="studentNameInput" class="block text-sm font-bold text-gold-400 mb-1.5">
+            Nombre y Apellidos Completos del Estudiante (Grado 8°):
+          </label>
+          <input
+            id="studentNameInput"
+            type="text"
+            placeholder="Ej: Samuel David Martínez Pérez"
+            autocomplete="off"
+            oninput="validateStudentName()"
+            class="w-full px-4 py-3 rounded-xl bg-navy-900/90 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 font-medium"
+          />
+          <p id="nameValidationMsg" class="text-xs text-amber-300 mt-1.5">
+            * Ingresa tu nombre y al menos un apellido para habilitar el botón de inicio.
+          </p>
+        </div>
+
+        <button
+          id="startExamBtn"
+          onclick="startExam()"
+          disabled
+          class="w-full py-4 rounded-xl font-extrabold text-base uppercase tracking-wider transition flex items-center justify-center gap-2 bg-slate-700 text-slate-400 cursor-not-allowed"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Iniciar Evaluación de Ciencias (15 Preguntas)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- PANTALLA 2: CONTENEDOR DEL EXAMEN -->
+    <section id="examScreen" class="hidden space-y-5">
+      <!-- Barra de Estado del Estudiante y Temporizador -->
+      <div class="glass-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+        <div class="space-y-0.5">
+          <div class="text-xs text-slate-300 font-medium">
+            Estudiante: <span id="activeStudentName" class="text-white font-bold">---</span> | Grado: <span class="text-gold-400 font-bold">8°</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="questionCounterBadge" class="text-sm sm:text-base font-extrabold text-gold-400">Pregunta 1 de 15</span>
+            <span id="sectionTypeBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-bold">
+              Parte I: Cerrada (0.37 pts)
+            </span>
+          </div>
+        </div>
+
+        <!-- Indicadores de Tiempo y Penalizaciones -->
+        <div class="flex items-center gap-3">
+          <div class="bg-red-950/70 border border-red-500/40 rounded-xl px-3 py-1.5 text-center">
+            <div class="text-[10px] uppercase tracking-wider text-red-300 font-semibold">Penalización</div>
+            <div id="penaltyCounterText" class="text-sm font-extrabold text-red-400">-0.0 pts (0)</div>
+          </div>
+
+          <div class="bg-navy-900 border border-gold-500/50 rounded-xl px-4 py-1.5 text-center min-w-[125px]">
+            <div class="text-[10px] uppercase tracking-wider text-gold-400 font-semibold">Tiempo Restante</div>
+            <div id="questionTimerDisplay" class="text-lg sm:text-xl font-mono font-extrabold text-white">01:30</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Progreso -->
+      <div class="w-full bg-navy-900/90 h-3 rounded-full overflow-hidden border border-white/10 p-0.5">
+        <div id="examProgressBar" class="bg-gradient-to-r from-gold-500 to-emerald-500 h-full rounded-full transition-all duration-300" style="width: 6.66%;"></div>
+      </div>
+
+      <!-- Tarjeta Principal de la Pregunta -->
+      <div class="glass-card rounded-2xl p-5 sm:p-7 space-y-5">
+        <!-- Insignias de Competencia y Eje Temático -->
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/15 pb-3">
+          <span id="competenceBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-400/30">
+            Competencia: Indagación
+          </span>
+          <span id="topicBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-gold-500/20 text-gold-300 border border-gold-400/30">
+            Tema: Experimento de Fototropismo
+          </span>
+        </div>
+
+        <!-- Lámina Científica SVG -->
+        <div class="glass-subcard rounded-2xl p-3 sm:p-4 border border-gold-500/30">
+          <div class="text-xs font-bold uppercase tracking-wider text-gold-400 mb-2 flex items-center justify-between">
+            <span>Lámina Científica Ilustrada de Apoyo</span>
+            <span id="svgFigureLabel" class="text-slate-400 font-mono">FIGURA 1.0</span>
+          </div>
+          <div id="svgContainer" class="w-full flex items-center justify-center bg-navy-900/90 rounded-xl p-2 overflow-hidden">
+            <!-- SVG inyectado dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Contexto Científico Extenso -->
+        <div class="bg-navy-900/75 rounded-xl p-4 sm:p-5 border-l-4 border-l-gold-500 space-y-2">
+          <div class="text-xs font-bold uppercase tracking-wider text-gold-400">Contexto Científico y Situación Problema</div>
+          <p id="questionContextText" class="text-sm sm:text-base text-slate-200 leading-relaxed text-justify"></p>
+        </div>
+
+        <!-- Enunciado de la Pregunta -->
+        <div class="pt-1">
+          <h3 id="questionStemText" class="text-base sm:text-lg font-extrabold text-white leading-snug"></h3>
+        </div>
+
+        <!-- Contenedor de Opciones Cerradas (Parte I) -->
+        <div id="closedOptionsContainer" class="space-y-3 pt-2">
+          <!-- Botones A, B, C, D generados por JS -->
+        </div>
+
+        <!-- Contenedor de Respuesta Abierta (Parte II) -->
+        <div id="openQuestionContainer" class="hidden space-y-3 pt-2">
+          <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span class="text-gold-400 font-bold">
+              Redacta tu explicación científica argumentada (Mínimo 4 líneas coherentes y 28 palabras):
+            </span>
+            <span id="openLinesCounter" class="px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 font-bold border border-amber-400/30">
+              Líneas efectivas: 0 / 4 | Palabras: 0 / 28
+            </span>
+          </div>
+          <textarea
+            id="openAnswerTextarea"
+            rows="6"
+            oninput="handleOpenAnswerInput()"
+            placeholder="Escribe aquí tu análisis detallado conectando los conceptos de tropismos, fitohormonas (auxinas), nastias o las observaciones obtenidas en el experimento escolar con plantas..."
+            class="w-full p-4 rounded-xl bg-navy-900/95 border border-white/25 text-white placeholder-slate-400 focus:outline-none focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 text-sm sm:text-base leading-relaxed"
+          ></textarea>
+          <p id="openValidationHint" class="text-xs text-amber-300">
+            * Recuerda emplear vocabulario biológico riguroso (auxinas, elongación celular, estímulo, turgencia, control experimental, etc.) sin repetir palabras artificialmente.
+          </p>
+        </div>
+
+        <!-- Botón de Avanzar -->
+        <div class="pt-4 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p id="lockReasonText" class="text-xs sm:text-sm text-amber-300 font-medium">
+            🔒 Debes esperar a que el temporizador llegue a 00:00 y seleccionar tu respuesta para avanzar.
+          </p>
+          <button
+            id="nextQuestionBtn"
+            onclick="goToNextQuestion()"
+            disabled
+            class="w-full sm:w-auto px-7 py-3.5 rounded-xl font-extrabold text-sm uppercase tracking-wider transition flex items-center justify-center gap-2 bg-slate-700 text-slate-400 cursor-not-allowed shrink-0"
+          >
+            <span id="nextBtnLabel">Siguiente Pregunta</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTALLA 3: RESULTADOS FINALES, QR Y REPORTE PDF -->
+    <section id="resultsScreen" class="hidden glass-card rounded-2xl p-5 sm:p-8 space-y-6">
+      <div class="rounded-xl overflow-hidden border border-gold-500/30 bg-navy-900/60 p-2">
+        <img id="resultsBannerImg" src="8°_CIENCIAS DE LA CREACIÓN.jpg" alt="Banner Institucional Resultados" class="w-full h-auto rounded-lg object-cover max-h-52 mx-auto" />
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/15 pb-5">
+        <div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+            Evaluación Finalizada Oficialmente
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-2">
+            Reporte de Resultados - Ciencias de la Creación 8°
+          </h2>
+          <p class="text-sm text-slate-300 mt-0.5">
+            Estudiante: <strong id="resStudentName" class="text-gold-400">---</strong> | Docente: <strong>Cristian David Ayazo</strong>
+          </p>
+        </div>
+
+        <div class="bg-navy-900 border-2 border-gold-500 rounded-2xl px-6 py-4 text-center shrink-0 shadow-lg">
+          <div class="text-xs uppercase font-bold text-slate-400">Calificación Definitiva</div>
+          <div id="resFinalGrade" class="text-4xl font-extrabold text-gold-400 my-1">0.00 / 5.00</div>
+          <div id="resPerformanceBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 inline-block">
+            Desempeño
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas de Desglose Cuantitativo -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 text-center">
+        <div class="glass-subcard p-3.5 rounded-xl">
+          <div class="text-xs text-slate-400 font-semibold">Cerradas Correctas</div>
+          <div id="resClosedCorrect" class="text-xl font-extrabold text-emerald-400 mt-1">0 / 10</div>
+          <div id="resClosedPoints" class="text-[11px] text-slate-300 mt-0.5">0.00 / 3.70 pts</div>
+        </div>
+
+        <div class="glass-subcard p-3.5 rounded-xl">
+          <div class="text-xs text-slate-400 font-semibold">Abiertas Validadas</div>
+          <div id="resOpenCompleted" class="text-xl font-extrabold text-sky-400 mt-1">0 / 5</div>
+          <div id="resOpenPoints" class="text-[11px] text-slate-300 mt-0.5">0.00 / 1.30 pts</div>
+        </div>
+
+        <div class="glass-subcard p-3.5 rounded-xl">
+          <div class="text-xs text-slate-400 font-semibold">Penalizaciones</div>
+          <div id="resPenaltiesTotal" class="text-xl font-extrabold text-red-400 mt-1">-0.00 pts</div>
+          <div id="resPenaltiesCount" class="text-[11px] text-slate-300 mt-0.5">0 infracciones</div>
+        </div>
+
+        <div class="glass-subcard p-3.5 rounded-xl">
+          <div class="text-xs text-slate-400 font-semibold">Horario de Ejecución</div>
+          <div id="resTimeSpan" class="text-sm font-extrabold text-gold-400 mt-1.5">--:-- a --:--</div>
+          <div id="resDateText" class="text-[11px] text-slate-300 mt-0.5">Fecha</div>
+        </div>
+      </div>
+
+      <!-- Código QR de Verificación y Descarga PDF -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-center glass-subcard rounded-2xl p-5 border border-gold-500/30">
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <div class="bg-white p-3 rounded-xl shadow-md shrink-0">
+            <canvas id="qrCanvas" width="160" height="160"></canvas>
+          </div>
+          <div class="space-y-1.5 text-center sm:text-left">
+            <h3 class="text-base font-extrabold text-gold-400">Código QR de Auditoría Académica</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Este código QR almacena de forma cifrada el resumen íntegro de la prueba: datos del estudiante, tiempos de inicio y fin, aciertos en las 10 preguntas cerradas, validación de las 5 abiertas, historial de penalizaciones y patrón de respuestas.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <button
+            onclick="generateDetailedPDF()"
+            class="w-full py-4 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-extrabold text-sm sm:text-base uppercase tracking-wider shadow-lg transition flex items-center justify-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <span>Descargar Reporte PDF Detallado</span>
+          </button>
+          <p class="text-[11px] text-center text-slate-300">
+            El PDF incluye el banner oficial, código QR, registro de penalizaciones y todas las respuestas cerradas y abiertas redactadas.
+          </p>
+        </div>
+      </div>
+
+      <!-- Desglose en Pantalla de Respuestas -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-gold-400">
+          Resumen Detallado de Respuestas (10 Cerradas y 5 Abiertas)
+        </h3>
+        <div id="resultsBreakdownList" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+          <!-- Poblado dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL BLOQUEANTE DE PANTALLA COMPLETA -->
+  <div id="fullscreenModal" class="fixed inset-0 z-50 hidden bg-navy-900/95 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="glass-card max-w-md w-full rounded-2xl p-6 text-center space-y-4 border-2 border-red-500/60">
+      <div class="w-14 h-14 rounded-full bg-red-500/20 border border-red-400 text-red-400 flex items-center justify-center mx-auto">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h3 class="text-xl font-extrabold text-white">Modo Pantalla Completa Requerido</h3>
+      <p class="text-sm text-slate-300 leading-relaxed">
+        Por protocolo de seguridad académica del <strong>Gimnasio Cristiano Faro de Luz</strong>, debes permanecer en pantalla completa durante toda la evaluación.
+      </p>
+      <button
+        onclick="returnToFullscreen()"
+        class="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-extrabold text-sm uppercase tracking-wider shadow-lg"
+      >
+        Volver a Pantalla Completa y Continuar
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL EXCLUSIVO DEL DOCENTE (CLAVE: dmar2026) -->
+  <div id="teacherModal" class="fixed inset-0 z-50 hidden bg-navy-900/90 backdrop-blur-lg flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full rounded-2xl p-6 space-y-5 border-2 border-gold-500">
+      <div class="flex items-center justify-between border-b border-white/15 pb-3">
+        <div class="flex items-center gap-2">
+          <svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <h3 class="text-lg font-extrabold text-white">Panel Exclusivo del Docente</h3>
+        </div>
+        <button onclick="closeTeacherModal()" class="text-slate-400 hover:text-white p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Paso 1: Autenticación -->
+      <div id="teacherLoginBox" class="space-y-3">
+        <p class="text-xs text-slate-300">
+          Docente <strong>Cristian David Ayazo</strong>, ingrese su clave de autorización para habilitar los controles de supervisión:
+        </p>
+        <input
+          id="teacherPassInput"
+          type="password"
+          placeholder="Contraseña docente..."
+          class="w-full px-4 py-2.5 rounded-xl bg-navy-900 border border-white/20 text-white focus:outline-none focus:border-gold-400"
+          onkeydown="if(event.key==='Enter') verifyTeacherPassword()"
+        />
+        <p id="teacherAuthError" class="hidden text-xs text-red-400 font-bold">
+          ❌ Clave incorrecta. Verifique e intente nuevamente.
+        </p>
+        <button
+          onclick="verifyTeacherPassword()"
+          class="w-full py-3 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 text-navy-900 font-extrabold text-sm uppercase tracking-wider"
+        >
+          Desbloquear Controles Docentes
+        </button>
+      </div>
+
+      <!-- Paso 2: Los 4 Botones de Acción Inmediata -->
+      <div id="teacherControlsBox" class="hidden space-y-3">
+        <div class="p-2.5 rounded-lg bg-emerald-500/15 border border-emerald-400/30 text-xs text-emerald-300 font-semibold">
+          ✓ Autorización concedida. Seleccione la acción inmediata a ejecutar:
+        </div>
+
+        <button
+          onclick="teacherActionUnlockNow()"
+          class="w-full p-3.5 rounded-xl bg-navy-800 hover:bg-navy-700 border border-gold-500/40 text-left flex items-center justify-between transition"
+        >
+          <div>
+            <div class="font-bold text-sm text-gold-400">1. Ingresar / Desbloquear Examen Ahora</div>
+            <div class="text-xs text-slate-300">Inicia el examen o libera el reloj de la pregunta actual a 00:00.</div>
+          </div>
+          <span class="text-gold-400 font-bold text-lg">→</span>
+        </button>
+
+        <button
+          onclick="teacherActionNextQuestion()"
+          class="w-full p-3.5 rounded-xl bg-navy-800 hover:bg-navy-700 border border-sky-400/40 text-left flex items-center justify-between transition"
+        >
+          <div>
+            <div class="font-bold text-sm text-sky-300">2. Avanzar a la Siguiente Pregunta</div>
+            <div class="text-xs text-slate-300">Guarda el estado actual y salta de inmediato a la siguiente pregunta.</div>
+          </div>
+          <span class="text-sky-300 font-bold text-lg">→</span>
+        </button>
+
+        <button
+          onclick="teacherActionJumpToOpen()"
+          class="w-full p-3.5 rounded-xl bg-navy-800 hover:bg-navy-700 border border-emerald-400/40 text-left flex items-center justify-between transition"
+        >
+          <div>
+            <div class="font-bold text-sm text-emerald-300">3. Ir a Preguntas Abiertas / Finalizar Abiertas</div>
+            <div class="text-xs text-slate-300">Salta directamente a la Pregunta 11 (Primera Abierta) o cierra el bloque abierto.</div>
+          </div>
+          <span class="text-emerald-300 font-bold text-lg">→</span>
+        </button>
+
+        <button
+          onclick="teacherActionFinishExam()"
+          class="w-full p-3.5 rounded-xl bg-red-950/80 hover:bg-red-900/80 border border-red-400/50 text-left flex items-center justify-between transition"
+        >
+          <div>
+            <div class="font-bold text-sm text-red-300">4. Finalizar por Completo el Examen</div>
+            <div class="text-xs text-slate-300">Cierra inmediatamente la prueba y genera el reporte final con QR y PDF.</div>
+          </div>
+          <span class="text-red-300 font-bold text-lg">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR DE NOTIFICACIONES FLOTANTES (TOASTS) -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2 max-w-sm w-full pointer-events-none px-3 sm:px-0"></div>
+
+  <script>
+    /*************************************************************************
+     * 1. CONFIGURACIÓN INSTITUCIONAL Y PARÁMETROS DEL EXAMEN (GRADO 8°)
+     *************************************************************************/
+    const CONFIG = {
+      institution: "GIMNASIO CRISTIANO FARO DE LUZ",
+      docente: "Cristian David Ayazo",
+      subject: "CIENCIAS DE LA CREACIÓN",
+      examTitle: "EVALUACIÓN DE TROPISMOS, NASTIAS Y PRÁCTICA EXPERIMENTAL",
+      grade: "8°",
+      bannerFile: "8°_CIENCIAS DE LA CREACIÓN.jpg",
+      scheduleEnabled: false, // Sin restricción de fecha/hora según solicitud
+      examDate: "2026-10-20",
+      startTime: "06:00",
+      endTime: "23:59",
+      closedCount: 10,        // Nc = 10 preguntas cerradas
+      openCount: 5,           // Na = 5 preguntas abiertas
+      closedBlockPoints: 3.70,// 0.37 pts cada cerrada
+      openBlockPoints: 1.30,  // 0.26 pts cada abierta
+      closedTimeSeconds: 90,  // 1.5 minutos por pregunta cerrada
+      openTimeSeconds: 600,   // 10 minutos por pregunta abierta
+      minOpenLines: 4,
+      minOpenWords: 28,
+      penaltyPoints: 0.5,
+      inactivityThresholdMs: 7500, // 7.5s para distinguir bloqueo de pantalla móvil
+      noiseThresholdPercent: 60
+    };
+
+    /*************************************************************************
+     * 2. BANNER OFICIAL DE RESPALDO EN CANVAS (EVITA FALLOS DE CARGA O CORS)
+     *************************************************************************/
+    function generateOfficialBannerDataURL() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1200;
+      canvas.height = 300;
+      const ctx = canvas.getContext("2d");
+
+      // Fondo degradado azul marino institucional
+      const grad = ctx.createLinearGradient(0, 0, 1200, 300);
+      grad.addColorStop(0, "#081b38");
+      grad.addColorStop(0.55, "#153866");
+      grad.addColorStop(1, "#0b2244");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1200, 300);
+
+      // Franjas decorativas doradas y esmeralda
+      ctx.fillStyle = "#c89d28";
+      ctx.fillRect(0, 0, 1200, 10);
+      ctx.fillRect(0, 290, 1200, 10);
+
+      ctx.fillStyle = "rgba(5, 150, 105, 0.25)";
+      ctx.beginPath();
+      ctx.moveTo(880, 10);
+      ctx.lineTo(1200, 10);
+      ctx.lineTo(1200, 290);
+      ctx.lineTo(760, 290);
+      ctx.closePath();
+      ctx.fill();
+
+      // Escudo / Emblema Izquierdo THE LIGHTHOUSE SCHOOL
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(125, 150, 78, 0, Math.PI * 2);
+      ctx.fillStyle = "#081b38";
+      ctx.fill();
+      ctx.lineWidth = 5;
+      ctx.strokeStyle = "#c89d28";
+      ctx.stroke();
+
+      // Faro estilizado dentro del escudo
+      ctx.fillStyle = "#c89d28";
+      ctx.fillRect(115, 115, 20, 62);
+      ctx.beginPath();
+      ctx.moveTo(110, 115);
+      ctx.lineTo(140, 115);
+      ctx.lineTo(125, 92);
+      ctx.closePath();
+      ctx.fill();
+
+      // Haces de luz del faro
+      ctx.fillStyle = "rgba(253, 224, 71, 0.45)";
+      ctx.beginPath();
+      ctx.moveTo(125, 105);
+      ctx.lineTo(65, 85);
+      ctx.lineTo(65, 120);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(125, 105);
+      ctx.lineTo(185, 85);
+      ctx.lineTo(185, 120);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 11px 'Plus Jakarta Sans', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("THE LIGHTHOUSE", 125, 196);
+      ctx.fillText("SCHOOL", 125, 210);
+      ctx.restore();
+
+      // Textos Centrales Institucionales
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#deb33c";
+      ctx.font = "bold 18px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText("MANANTIAL DE DIOS • GIMNASIO CRISTIANO FARO DE LUZ", 235, 62);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "extrabold 34px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText("EVALUACIÓN DE TROPISMOS Y NASTIAS", 235, 112);
+
+      // Cápsula de Asignatura y Grado
+      ctx.fillStyle = "#059669";
+      ctx.beginPath();
+      ctx.roundRect(235, 134, 490, 46, 12);
+      ctx.fill();
+      ctx.strokeStyle = "#c89d28";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 22px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText("8° • CIENCIAS DE LA CREACIÓN", 258, 165);
+
+      ctx.fillStyle = "#e2e8f0";
+      ctx.font = "600 18px 'Plus Jakarta Sans', sans-serif";
+      ctx.fillText("Docente: Cristian David Ayazo  |  Prueba Saber por Competencias", 235, 218);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "bold 14px monospace";
+      ctx.fillText("CODIGO: F-GA2-004 | VERSION: 2 | GRADO OCTAVO (8°)", 235, 258);
+
+      return canvas.toDataURL("image/jpeg", 0.92);
+    }
+
+    let officialBannerDataURL = "";
+
+    function setupBanners() {
+      officialBannerDataURL = generateOfficialBannerDataURL();
+      const mainImg = document.getElementById("mainBannerImg");
+      const resImg = document.getElementById("resultsBannerImg");
+
+      [mainImg, resImg].forEach(img => {
+        if (!img) return;
+        img.onerror = function() {
+          this.onerror = null;
+          this.src = officialBannerDataURL;
+        };
+      });
+    }
+
+    /*************************************************************************
+     * 3. LÁMINAS CIENTÍFICAS VECTORIALES SVG (15 LÁMINAS: 10 CERRADAS + 5 ABIERTAS)
+     *************************************************************************/
+    const SVG_ILLUSTRATIONS = [
+      // P1: Fototropismo en caja con ventana lateral (Experimento escolar)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <!-- Sol lateral derecho -->
+        <circle cx="600" cy="65" r="32" fill="#facc15" opacity="0.9"/>
+        <g stroke="#fde047" stroke-width="3" stroke-dasharray="6,4">
+          <line x1="555" y1="65" x2="430" y2="85"/>
+          <line x1="560" y1="85" x2="430" y2="110"/>
+          <line x1="555" y1="45" x2="430" y2="65"/>
+        </g>
+        <!-- Caja experimental oscura -->
+        <rect x="210" y="25" width="215" height="185" fill="#1e293b" stroke="#94a3b8" stroke-width="3"/>
+        <!-- Ventana lateral abierta -->
+        <rect x="418" y="55" width="12" height="65" fill="#fef08a"/>
+        <text x="442" y="52" fill="#fde047" font-size="12" font-weight="bold">Ventana lateral de luz</text>
+        <!-- Matera -->
+        <polygon points="280,155 340,155 330,200 290,200" fill="#b45309" stroke="#f59e0b" stroke-width="2"/>
+        <!-- Tallo curvado hacia la derecha -->
+        <path d="M310,155 Q312,105 385,85" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round"/>
+        <ellipse cx="365" cy="82" rx="16" ry="8" transform="rotate(-20 365 82)" fill="#4ade80"/>
+        <ellipse cx="392" cy="88" rx="14" ry="7" transform="rotate(15 392 88)" fill="#16a34a"/>
+        <!-- Zoom celular de auxinas -->
+        <rect x="22" y="30" width="165" height="170" rx="10" fill="#0f2942" stroke="#c89d28" stroke-width="2"/>
+        <text x="35" y="52" fill="#fde047" font-size="11" font-weight="bold">ZOOM TALLO (AUXINAS)</text>
+        <rect x="45" y="65" width="45" height="110" fill="#14532d" stroke="#4ade80" stroke-width="1.5"/>
+        <rect x="92" y="65" width="45" height="110" fill="#166534" stroke="#4ade80" stroke-width="1.5"/>
+        <!-- Puntos de auxina concentrados en lado sombreado (izquierdo) -->
+        <g fill="#f43f5e">
+          <circle cx="58" cy="80" r="4"/><circle cx="75" cy="88" r="4"/><circle cx="62" cy="102" r="4"/>
+          <circle cx="78" cy="115" r="4"/><circle cx="55" cy="128" r="4"/><circle cx="72" cy="142" r="4"/>
+          <circle cx="63" cy="158" r="4"/><circle cx="115" cy="95" r="3"/><circle cx="110" cy="140" r="3"/>
+        </g>
+        <text x="36" y="190" fill="#fda4af" font-size="10">Sombra (+AIA) | Luz (-AIA)</text>
+        <text x="230" y="45" fill="#e2e8f0" font-size="12" font-weight="bold">Caja Experimental Grupo 8°</text>
+      </svg>`,
+
+      // P2: Gravitropismo en plántula girada horizontalmente (tallo vs raíz)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="25" y="32" fill="#fde047" font-size="13" font-weight="bold">MONTAJE DE GRAVITROPISMO: MATERA INCLINADA 90° (DESPUÉS DE 96 HORAS)</text>
+        <!-- Matera acostada -->
+        <polygon points="180,95 180,165 260,155 260,105" fill="#92400e" stroke="#f59e0b" stroke-width="2.5"/>
+        <text x="192" y="135" fill="#fef3c7" font-size="11" font-weight="bold">Sustrato</text>
+        <!-- Tallo doblándose hacia arriba (Gravitropismo -) -->
+        <path d="M260,125 L340,125 Q395,125 405,55" fill="none" stroke="#22c55e" stroke-width="9" stroke-linecap="round"/>
+        <ellipse cx="405" cy="48" rx="18" ry="9" fill="#4ade80"/>
+        <text x="425" y="65" fill="#4ade80" font-size="12" font-weight="bold">Tallo: Gravitropismo Negativo (-)</text>
+        <text x="425" y="83" fill="#cbd5e1" font-size="11">Cara inferior con +AIA SE ELONGA</text>
+        <!-- Raíz doblándose hacia abajo (Gravitropismo +) -->
+        <path d="M260,138 L325,138 Q365,138 375,202" fill="none" stroke="#eab308" stroke-width="6" stroke-linecap="round"/>
+        <text x="395" y="185" fill="#fde047" font-size="12" font-weight="bold">Raíz: Gravitropismo Positivo (+)</text>
+        <text x="395" y="203" fill="#cbd5e1" font-size="11">Cara inferior con +AIA SE INHIBE</text>
+        <!-- Vector Gravedad -->
+        <line x1="95" y1="65" x2="95" y2="185" stroke="#38bdf8" stroke-width="4"/>
+        <polygon points="87,180 103,180 95,198" fill="#38bdf8"/>
+        <text x="45" y="60" fill="#38bdf8" font-size="12" font-weight="bold">Gravedad (g)</text>
+      </svg>`,
+
+      // P3: Sismonastia en Mimosa pudica y turgencia en el pulvino
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <!-- Panel izquierdo: Foliolos abiertos -->
+        <rect x="20" y="22" width="300" height="186" rx="10" fill="#0f2942" stroke="#10b981" stroke-width="2"/>
+        <text x="35" y="45" fill="#34d399" font-size="12" font-weight="bold">1. ANTES DEL CONTACTO (TURGENTE)</text>
+        <line x1="70" y1="120" x2="250" y2="120" stroke="#22c55e" stroke-width="4"/>
+        <circle cx="75" cy="120" r="10" fill="#10b981" stroke="#a7f3d0" stroke-width="2"/>
+        <ellipse cx="120" cy="95" rx="22" ry="9" fill="#4ade80"/>
+        <ellipse cx="170" cy="95" rx="22" ry="9" fill="#4ade80"/>
+        <ellipse cx="220" cy="95" rx="22" ry="9" fill="#4ade80"/>
+        <ellipse cx="120" cy="145" rx="22" ry="9" fill="#4ade80"/>
+        <ellipse cx="170" cy="145" rx="22" ry="9" fill="#4ade80"/>
+        <ellipse cx="220" cy="145" rx="22" ry="9" fill="#4ade80"/>
+        <text x="35" y="190" fill="#e2e8f0" font-size="11">Pulvino lleno de K+ y H2O (Alta presión)</text>
+
+        <!-- Panel derecho: Foliolos plegados tras estímulo mecánico -->
+        <rect x="355" y="22" width="305" height="186" rx="10" fill="#0f2942" stroke="#f59e0b" stroke-width="2"/>
+        <text x="370" y="45" fill="#fbbf24" font-size="12" font-weight="bold">2. TRAS EL TOQUE (SISMONASTIA - 2 SEG)</text>
+        <line x1="405" y1="115" x2="575" y2="155" stroke="#16a34a" stroke-width="4"/>
+        <circle cx="405" cy="115" r="10" fill="#f59e0b" stroke="#fde68a" stroke-width="2"/>
+        <ellipse cx="460" cy="135" rx="22" ry="6" transform="rotate(14 460 135)" fill="#15803d"/>
+        <ellipse cx="510" cy="147" rx="22" ry="6" transform="rotate(14 510 147)" fill="#15803d"/>
+        <ellipse cx="560" cy="158" rx="22" ry="6" transform="rotate(14 560 158)" fill="#15803d"/>
+        <text x="370" y="190" fill="#fde68a" font-size="11">Salida de K+ y agua del pulvino (Pérdida turgencia)</text>
+      </svg>`,
+
+      // P4: Hidrotropismo positivo en raíces frente a barrera de arcilla húmeda
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <rect x="40" y="25" width="600" height="180" rx="8" fill="#1e293b" stroke="#64748b" stroke-width="2"/>
+        <!-- Zona seca izquierda -->
+        <rect x="45" y="30" width="280" height="170" fill="#451a03" opacity="0.7"/>
+        <text x="65" y="55" fill="#fdba74" font-size="13" font-weight="bold">SUSTRATO SECO (0% Humedad)</text>
+        <!-- Vasija porosa con agua a la derecha -->
+        <ellipse cx="515" cy="115" rx="75" ry="55" fill="#0284c7" opacity="0.35"/>
+        <ellipse cx="515" cy="115" rx="45" ry="35" fill="#38bdf8" stroke="#bae6fd" stroke-width="3"/>
+        <text x="480" y="120" fill="#082f49" font-size="12" font-weight="bold">Agua H2O</text>
+        <!-- Plántula en el centro -->
+        <line x1="310" y1="30" x2="310" y2="75" stroke="#22c55e" stroke-width="6"/>
+        <!-- Raíces curvándose hacia el agua superando la vertical -->
+        <path d="M310,75 Q315,130 455,120" fill="none" stroke="#fde047" stroke-width="4.5"/>
+        <path d="M310,75 Q325,155 465,140" fill="none" stroke="#facc15" stroke-width="3.5"/>
+        <path d="M310,75 Q300,115 395,95" fill="none" stroke="#fde047" stroke-width="3"/>
+        <text x="260" y="190" fill="#bae6fd" font-size="12" font-weight="bold">Curvatura radicular hacia el gradiente de potencial hídrico (+)</text>
+      </svg>`,
+
+      // P5: Experimento de Darwin y Boysen-Jensen con coleóptilos (Ápice y bloque de agar)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="30" y="30" fill="#fde047" font-size="12" font-weight="bold">TRATAMIENTOS EXPERIMENTALES EN COLEÓPTILOS BAJO LUZ LATERAL DERECHA →</text>
+        <!-- Luz desde la derecha -->
+        <circle cx="635" cy="110" r="24" fill="#facc15"/>
+        <!-- Lote 1: Control intacto -->
+        <path d="M85,185 Q85,120 125,95" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="round"/>
+        <text x="55" y="210" fill="#e2e8f0" font-size="11" font-weight="bold">1. Intacto (Se curva)</text>
+        <!-- Lote 2: Ápice cortado -->
+        <line x1="230" y1="185" x2="230" y2="105" stroke="#22c55e" stroke-width="12"/>
+        <line x1="218" y1="105" x2="242" y2="105" stroke="#f43f5e" stroke-width="3"/>
+        <text x="180" y="210" fill="#e2e8f0" font-size="11" font-weight="bold">2. Sin ápice (Recto)</text>
+        <!-- Lote 3: Capuchón opaco en el ápice -->
+        <line x1="375" y1="185" x2="375" y2="95" stroke="#22c55e" stroke-width="12"/>
+        <rect x="365" y="82" width="20" height="25" rx="4" fill="#0f172a" stroke="#94a3b8" stroke-width="2"/>
+        <text x="320" y="210" fill="#e2e8f0" font-size="11" font-weight="bold">3. Ápice cubierto (Recto)</text>
+        <!-- Lote 4: Bloque de agar permeable -->
+        <path d="M510,185 Q512,130 548,100" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="round"/>
+        <rect x="518" y="112" width="18" height="10" fill="#38bdf8" stroke="#e0f2fe" stroke-width="1.5"/>
+        <text x="465" y="210" fill="#38bdf8" font-size="11" font-weight="bold">4. Con Agar (Se curva)</text>
+      </svg>`,
+
+      // P6: Tigmotropismo (Zarcillo de maracuyá/arveja) vs Tigmonastia (Dionaea muscipula)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <!-- Mitad Izquierda: Tigmotropismo -->
+        <rect x="20" y="20" width="310" height="190" rx="10" fill="#0f2942" stroke="#22c55e" stroke-width="2"/>
+        <text x="35" y="45" fill="#4ade80" font-size="12" font-weight="bold">PLANTA X: ZARCILLO EN TUTOR DE MADERA</text>
+        <rect x="160" y="55" width="16" height="135" fill="#b45309" stroke="#f59e0b" stroke-width="1.5"/>
+        <path d="M95,175 Q140,160 160,145 C185,135 145,120 175,105 C190,95 150,80 176,70" fill="none" stroke="#4ade80" stroke-width="5" stroke-linecap="round"/>
+        <text x="35" y="198" fill="#cbd5e1" font-size="11">Crecimiento diferencial enrollado e irreversible</text>
+
+        <!-- Mitad Derecha: Tigmonastia -->
+        <rect x="350" y="20" width="310" height="190" rx="10" fill="#0f2942" stroke="#f43f5e" stroke-width="2"/>
+        <text x="365" y="45" fill="#fda4af" font-size="12" font-weight="bold">PLANTA Y: TRAMPA DE DIONAEA MUSCIPULA</text>
+        <path d="M460,150 Q430,85 505,75 Q505,120 460,150" fill="#16a34a" stroke="#4ade80" stroke-width="3"/>
+        <path d="M460,150 Q555,140 545,80 Q505,120 460,150" fill="#15803d" stroke="#f43f5e" stroke-width="3"/>
+        <circle cx="500" cy="112" r="7" fill="#facc15"/>
+        <text x="365" y="198" fill="#cbd5e1" font-size="11">Cierre rápido (0.3 s) por potencial eléctrico y turgencia</text>
+      </svg>`,
+
+      // P7: Gráfica de Dosis-Respuesta de Auxinas (AIA) en Raíces vs Tallos
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <!-- Ejes cartesianos -->
+        <line x1="90" y1="25" x2="90" y2="195" stroke="#94a3b8" stroke-width="2.5"/>
+        <line x1="90" y1="135" x2="630" y2="135" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+        <line x1="90" y1="195" x2="630" y2="195" stroke="#94a3b8" stroke-width="2.5"/>
+        <text x="20" y="80" fill="#4ade80" font-size="11" font-weight="bold">+ Estimula</text>
+        <text x="25" y="138" fill="#e2e8f0" font-size="11">0% Control</text>
+        <text x="20" y="175" fill="#f43f5e" font-size="11" font-weight="bold">- Inhibe</text>
+        <!-- Curva Raíz (Óptimo a baja concentración 10^-10 M) -->
+        <path d="M110,135 Q185,45 260,135 Q310,180 390,188" fill="none" stroke="#fde047" stroke-width="4"/>
+        <text x="155" y="62" fill="#fde047" font-size="12" font-weight="bold">Curva Raíz (Óptimo 10⁻¹⁰ M)</text>
+        <!-- Curva Tallo (Óptimo a alta concentración 10^-5 M) -->
+        <path d="M240,135 Q430,20 555,135 Q585,165 610,185" fill="none" stroke="#22c55e" stroke-width="4"/>
+        <text x="405" y="55" fill="#4ade80" font-size="12" font-weight="bold">Curva Tallo (Óptimo 10⁻⁵ M)</text>
+        <!-- Etiquetas de concentración eje X -->
+        <text x="165" y="215" fill="#cbd5e1" font-size="11">10⁻¹⁰ M (Baja)</text>
+        <text x="315" y="215" fill="#cbd5e1" font-size="11">10⁻⁸ M</text>
+        <text x="455" y="215" fill="#fde047" font-size="11" font-weight="bold">10⁻⁵ M (Alta AIA)</text>
+      </svg>`,
+
+      // P8: Diseño experimental en el colegio (Control de variables en experimento de 8°)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="30" y="32" fill="#fde047" font-size="12" font-weight="bold">DISEÑO EXPERIMENTAL GRADO 8°: TRES TRATAMIENTOS LUMÍNICOS EN FRIJOL</text>
+        <!-- Caja A: Luz Cenital Superior -->
+        <rect x="45" y="50" width="170" height="150" rx="8" fill="#0f2942" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="130" cy="68" r="10" fill="#facc15"/>
+        <line x1="130" y1="175" x2="130" y2="105" stroke="#22c55e" stroke-width="6"/>
+        <text x="62" y="192" fill="#bae6fd" font-size="11" font-weight="bold">Grupo A: Luz Superior</text>
+
+        <!-- Caja B: Luz Lateral Derecha -->
+        <rect x="255" y="50" width="170" height="150" rx="8" fill="#0f2942" stroke="#c89d28" stroke-width="2"/>
+        <circle cx="405" cy="110" r="10" fill="#facc15"/>
+        <path d="M330,175 Q335,125 385,112" fill="none" stroke="#22c55e" stroke-width="6"/>
+        <text x="272" y="192" fill="#fde047" font-size="11" font-weight="bold">Grupo B: Luz Lateral</text>
+
+        <!-- Caja C: Oscuridad Total (Etiolación) -->
+        <rect x="465" y="50" width="170" height="150" rx="8" fill="#090d16" stroke="#64748b" stroke-width="2"/>
+        <line x1="550" y1="175" x2="550" y2="70" stroke="#fef08a" stroke-width="4"/>
+        <ellipse cx="550" cy="68" rx="9" ry="5" fill="#fde047"/>
+        <text x="480" y="192" fill="#cbd5e1" font-size="11" font-weight="bold">Grupo C: Oscuridad Total</text>
+      </svg>`,
+
+      // P9: Fotonastia y Nictinastia (Ciclo Circadiano Día vs Noche en Flores y Leguminosas)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <!-- Día: Fotoperiodo Diurno -->
+        <rect x="25" y="22" width="295" height="185" rx="10" fill="#0c2d48" stroke="#facc15" stroke-width="2"/>
+        <circle cx="70" cy="60" r="20" fill="#facc15"/>
+        <text x="105" y="58" fill="#fde047" font-size="12" font-weight="bold">12:00 PM - FOTONASTIA DIURNA</text>
+        <circle cx="175" cy="130" r="14" fill="#ca8a04"/>
+        <ellipse cx="175" cy="95" rx="10" ry="20" fill="#facc15"/>
+        <ellipse cx="175" cy="165" rx="10" ry="20" fill="#facc15"/>
+        <ellipse cx="140" cy="130" rx="20" ry="10" fill="#facc15"/>
+        <ellipse cx="210" cy="130" rx="20" ry="10" fill="#facc15"/>
+        <text x="50" y="195" fill="#e2e8f0" font-size="11">Cara interna crece / Turgencia de apertura</text>
+
+        <!-- Noche: Nictinastia -->
+        <rect x="355" y="22" width="300" height="185" rx="10" fill="#051020" stroke="#818cf8" stroke-width="2"/>
+        <path d="M405,45 A18,18 0 1,0 425,70 A14,14 0 1,1 405,45" fill="#e0e7ff"/>
+        <text x="440" y="58" fill="#a5b4fc" font-size="12" font-weight="bold">11:00 PM - NICTINASTIA NOCTURNA</text>
+        <line x1="505" y1="175" x2="505" y2="135" stroke="#22c55e" stroke-width="5"/>
+        <path d="M490,135 Q505,80 520,135 Z" fill="#eab308" stroke="#fde047" stroke-width="2"/>
+        <text x="380" y="195" fill="#cbd5e1" font-size="11">Cierre reversible que evita pérdida térmica</text>
+      </svg>`,
+
+      // P10: Estatolitos (Amiloplastos) sedimentando en la columela de la cofia radicular
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <!-- Célula en posición vertical -->
+        <rect x="45" y="25" width="250" height="180" rx="12" fill="#0f2942" stroke="#38bdf8" stroke-width="2"/>
+        <text x="65" y="48" fill="#7dd3fc" font-size="12" font-weight="bold">A. ESTATOCITO EN RAÍZ VERTICAL</text>
+        <rect x="125" y="65" width="90" height="110" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="2.5"/>
+        <!-- Amiloplastos en el fondo -->
+        <circle cx="145" cy="162" r="7" fill="#facc15"/><circle cx="165" cy="164" r="7" fill="#facc15"/>
+        <circle cx="185" cy="162" r="7" fill="#facc15"/><circle cx="198" cy="160" r="7" fill="#facc15"/>
+        <text x="72" y="195" fill="#e2e8f0" font-size="11">Estatolitos en la base → Flujo simétrico de AIA</text>
+
+        <!-- Célula tras giro de 90° -->
+        <rect x="365" y="25" width="270" height="180" rx="12" fill="#0f2942" stroke="#f59e0b" stroke-width="2"/>
+        <text x="382" y="48" fill="#fde047" font-size="12" font-weight="bold">B. ESTATOCITO GIRADO 90° (HORIZONTAL)</text>
+        <rect x="440" y="75" width="120" height="85" rx="8" fill="#1e293b" stroke="#4ade80" stroke-width="2.5"/>
+        <!-- Amiloplastos caen a la pared lateral inferior -->
+        <circle cx="465" cy="148" r="7" fill="#facc15"/><circle cx="488" cy="149" r="7" fill="#facc15"/>
+        <circle cx="512" cy="148" r="7" fill="#facc15"/><circle cx="535" cy="147" r="7" fill="#facc15"/>
+        <text x="385" y="195" fill="#fde68a" font-size="11">Sedimentación inferior → Redirige canales PIN de AIA</text>
+      </svg>`,
+
+      // P11 (Abierta 1): Análisis del experimento escolar de fototropismo y etiolación
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="25" y="32" fill="#fde047" font-size="13" font-weight="bold">RESULTADOS DEL EXPERIMENTO PRÁCTICO DE GRADO 8° (DÍA 1 AL DÍA 10)</text>
+        <rect x="30" y="48" width="295" height="160" rx="10" fill="#0f2942" stroke="#22c55e" stroke-width="2"/>
+        <text x="48" y="72" fill="#4ade80" font-size="12" font-weight="bold">MONTAJE 1: VENTANA LATERAL</text>
+        <path d="M120,185 Q130,120 220,105" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round"/>
+        <circle cx="265" cy="95" r="16" fill="#facc15"/>
+        <text x="48" y="198" fill="#cbd5e1" font-size="11">Ángulo curvatura: 62° | Hoja verde expandida</text>
+
+        <rect x="355" y="48" width="295" height="160" rx="10" fill="#0f2942" stroke="#eab308" stroke-width="2"/>
+        <text x="372" y="72" fill="#fde047" font-size="12" font-weight="bold">MONTAJE 2: CAJA CERRADA (OSCURIDAD)</text>
+        <line x1="495" y1="188" x2="495" y2="80" stroke="#fef08a" stroke-width="5"/>
+        <text x="372" y="198" fill="#cbd5e1" font-size="11">Tallo largo (24 cm), pálido amarillento (Etiolado)</text>
+      </svg>`,
+
+      // P12 (Abierta 2): Respuesta opuesta de Raíz y Tallo al rotar la matera 90°
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="25" y="32" fill="#fde047" font-size="13" font-weight="bold">PARADOJA FISIOLÓGICA DE LAS AUXINAS EN LA PLÁNTULA INVERTIDA</text>
+        <rect x="40" y="50" width="600" height="155" rx="10" fill="#0f2942" stroke="#c89d28" stroke-width="2"/>
+        <polygon points="220,95 220,155 300,145 300,105" fill="#92400e" stroke="#f59e0b" stroke-width="2"/>
+        <path d="M300,120 Q370,120 390,65" fill="none" stroke="#22c55e" stroke-width="8"/>
+        <path d="M300,132 Q360,132 375,188" fill="none" stroke="#facc15" stroke-width="5"/>
+        <text x="415" y="80" fill="#4ade80" font-size="12" font-weight="bold">Tallo: +AIA abajo = Elongación</text>
+        <text x="415" y="180" fill="#fde047" font-size="12" font-weight="bold">Raíz: +AIA abajo = Inhibición</text>
+        <text x="55" y="130" fill="#e2e8f0" font-size="12">Misma hormona (AIA) → Efecto opuesto</text>
+      </svg>`,
+
+      // P13 (Abierta 3): Cuadro comparativo fisiológico Tropismos vs Nastias
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <rect x="25" y="25" width="300" height="180" rx="10" fill="#0f2942" stroke="#22c55e" stroke-width="2"/>
+        <text x="45" y="52" fill="#4ade80" font-size="13" font-weight="bold">TROPISMOS (CRECIMIENTO)</text>
+        <text x="45" y="85" fill="#e2e8f0" font-size="12">• Direccional (Depende del estímulo)</text>
+        <text x="45" y="112" fill="#e2e8f0" font-size="12">• Lento (Horas o días)</text>
+        <text x="45" y="139" fill="#e2e8f0" font-size="12">• Irreversible (División/Elongación)</text>
+        <text x="45" y="166" fill="#fde047" font-size="12">• Regulado por Auxinas (AIA)</text>
+
+        <rect x="355" y="25" width="300" height="180" rx="10" fill="#0f2942" stroke="#38bdf8" stroke-width="2"/>
+        <text x="375" y="52" fill="#38bdf8" font-size="13" font-weight="bold">NASTIAS (TURGENCIA)</text>
+        <text x="375" y="85" fill="#e2e8f0" font-size="12">• No direccional (Difuso)</text>
+        <text x="375" y="112" fill="#e2e8f0" font-size="12">• Rápido (Segundos o minutos)</text>
+        <text x="375" y="139" fill="#e2e8f0" font-size="12">• Reversible (Temporal)</text>
+        <text x="375" y="166" fill="#fde047" font-size="12">• Regulado por Iones K+ y H2O</text>
+      </svg>`,
+
+      // P14 (Abierta 4): Control de Variables y Fuentes de Error Experimental
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="25" y="34" fill="#fde047" font-size="13" font-weight="bold">MATRIZ DE RIGOR METODOLÓGICO EN EL EXPERIMENTO DE PLANTAS</text>
+        <rect x="30" y="52" width="195" height="150" rx="10" fill="#0f2942" stroke="#f59e0b" stroke-width="2"/>
+        <text x="45" y="78" fill="#fbbf24" font-size="12" font-weight="bold">V. INDEPENDIENTE</text>
+        <text x="45" y="108" fill="#e2e8f0" font-size="11">Dirección o ubicación</text>
+        <text x="45" y="126" fill="#e2e8f0" font-size="11">de la fuente de luz /</text>
+        <text x="45" y="144" fill="#e2e8f0" font-size="11">humedad manipulada.</text>
+
+        <rect x="242" y="52" width="195" height="150" rx="10" fill="#0f2942" stroke="#10b981" stroke-width="2"/>
+        <text x="258" y="78" fill="#34d399" font-size="12" font-weight="bold">V. DEPENDIENTE</text>
+        <text x="258" y="108" fill="#e2e8f0" font-size="11">Ángulo de curvatura (°)</text>
+        <text x="258" y="126" fill="#e2e8f0" font-size="11">y longitud del tallo (cm)</text>
+        <text x="258" y="144" fill="#e2e8f0" font-size="11">medidos cada 24 h.</text>
+
+        <rect x="455" y="52" width="195" height="150" rx="10" fill="#0f2942" stroke="#38bdf8" stroke-width="2"/>
+        <text x="470" y="78" fill="#7dd3fc" font-size="12" font-weight="bold">V. CONTROLADAS</text>
+        <text x="470" y="108" fill="#e2e8f0" font-size="11">Especie de semilla,</text>
+        <text x="470" y="126" fill="#e2e8f0" font-size="11">volumen de riego (mL),</text>
+        <text x="470" y="144" fill="#e2e8f0" font-size="11">tipo de suelo y temp.</text>
+      </svg>`,
+
+      // P15 (Abierta 5): Diseño experimental integrador (Supervivencia y Adaptación Vegetal)
+      `<svg viewBox="0 0 680 230" class="w-full max-h-56">
+        <rect width="680" height="230" rx="12" fill="#07162c"/>
+        <text x="25" y="34" fill="#fde047" font-size="13" font-weight="bold">INTEGRACIÓN ADAPTATIVA: DEL LABORATORIO ESCOLAR AL ECOSISTEMA</text>
+        <rect x="30" y="50" width="620" height="155" rx="10" fill="#0f2942" stroke="#10b981" stroke-width="2"/>
+        <!-- Sol, planta trepadora y raíz buscando agua -->
+        <circle cx="580" cy="85" r="22" fill="#facc15"/>
+        <rect x="290" y="70" width="14" height="120" fill="#b45309"/>
+        <path d="M260,180 Q290,145 304,120 Q330,95 410,85" fill="none" stroke="#22c55e" stroke-width="6" stroke-linecap="round"/>
+        <path d="M260,180 Q210,195 145,185" fill="none" stroke="#38bdf8" stroke-width="4"/>
+        <ellipse cx="120" cy="185" rx="35" ry="12" fill="#0284c7"/>
+        <text x="45" y="95" fill="#bae6fd" font-size="12" font-weight="bold">1. Hidrotropismo (+) hacia acuífero</text>
+        <text x="45" y="122" fill="#4ade80" font-size="12" font-weight="bold">2. Tigmotropismo (+) sobre soporte</text>
+        <text x="45" y="149" fill="#fde047" font-size="12" font-weight="bold">3. Fototropismo (+) hacia el dosel</text>
+      </svg>`
+    ];
+
+    /*************************************************************************
+     * 4. BANCO DE 15 PREGUNTAS: 10 CERRADAS (3.70 PTS) Y 5 ABIERTAS (1.30 PTS)
+     *************************************************************************/
+    const QUESTIONS = [
+      // ================= PARTE I: 10 PREGUNTAS CERRADAS (0.37 pts c/u) =================
+      {
+        id: 1,
+        type: "closed",
+        competence: "Explicación de fenómenos",
+        topic: "Experimento de Fototropismo y Auxinas",
+        context: "Hace unas semanas, los estudiantes de grado 8° del Gimnasio Cristiano Faro de Luz desarrollaron un experimento sembrando semillas de frijol (Phaseolus vulgaris) dentro de cajas de cartón cerradas que poseían únicamente un orificio lateral derecho por donde ingresaba la luz solar. Al cabo de siete días de observación y registro fotográfico, todos los equipos comprobaron que los tallos jóvenes no crecieron verticalmente, sino que se curvaron de manera pronunciada hacia la ventana lateral iluminada. Al analizar histológicamente el tallo en clase, el docente explicó que la fitohormona ácido indolacético (auxina o AIA), sintetizada en el ápice caulinar, se redistribuye lateralmente cuando percibe un gradiente lumínico unidireccional.",
+        stem: "Con base en los resultados obtenidos en el experimento escolar y el mecanismo fisiológico de las fitohormonas, ¿cuál es la explicación celular correcta de la curvatura del tallo hacia la luz?",
+        options: [
+          "A. La luz solar destruye por completo las células del lado iluminado del tallo, provocando que el tejido colapse mecánicamente y el tallo caiga por su propio peso hacia el orificio de la caja.",
+          "B. Las auxinas (AIA) migran desde el lado iluminado hacia el lado sombreado del tallo; allí su mayor concentración estimula la acidificación de la pared celular y una mayor elongación de las células en sombra, inclinando el tallo hacia la luz.",
+          "C. Las auxinas se acumulan exclusivamente en la cara directamente iluminada del tallo, acelerando la división mitótica en ese costado para empujar el ápice en dirección opuesta a la sombra.",
+          "D. El orificio lateral genera un cambio rápido y reversible de presión de turgencia por salida de iones potasio (K+) en la base de las hojas, doblando el tallo en pocos segundos sin implicar crecimiento."
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 2,
+        type: "closed",
+        competence: "Indagación",
+        topic: "Experimento de Gravitropismo en Plántulas",
+        context: "Durante la segunda fase del proyecto experimental de grado 8°, un grupo de estudiantes tomó tres materas con plántulas de maíz germinadas de cinco días y las colocó acostadas en posición completamente horizontal (giradas 90° respecto a su eje original) dentro de una cámara oscura para evitar cualquier interferencia de la luz. Cuarenta y ocho horas después, al destapar el montaje y observar las raíces primarias y los coleóptilos (tallos jóvenes), los estudiantes registraron que ambos órganos habían modificado su dirección de crecimiento respecto a la línea horizontal inicial, pero en sentidos diametralmente opuestos.",
+        stem: "De acuerdo con el montaje realizado por los estudiantes en ausencia de luz, ¿qué direcciones de curvatura registraron en su bitácora y cómo se clasifican respectivamente estas respuestas?",
+        options: [
+          "A. El tallo creció hacia abajo exhibiendo gravitropismo positivo (+), mientras que la raíz creció hacia arriba mostrando gravitropismo negativo (-) para buscar oxígeno atmosférico.",
+          "B. Tanto el tallo como la raíz continuaron creciendo en línea recta horizontal debido a que, en ausencia total de luz solar, las plantas pierden la capacidad de detectar el vector de la gravedad.",
+          "C. El tallo se curvó hacia arriba en contra del vector gravitacional (gravitropismo negativo), mientras que la raíz primaria se curvó hacia abajo en dirección al centro de la Tierra (gravitropismo positivo).",
+          "D. El tallo y la raíz se plegaron simultáneamente hacia el interior de la semilla mediante un movimiento de sismonastia reversible que desapareció al volver a poner la matera de pie."
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 3,
+        type: "closed",
+        competence: "Uso comprensivo del conocimiento científico",
+        topic: "Sismonastia y Turgencia en Mimosa pudica",
+        context: "En el jardín exterior del colegio, los estudiantes compararon las plántulas de su experimento de tropismos con una planta de 'dormidera' o 'sensitiva' (Mimosa pudica). Al tocar suavemente el extremo de una sola hojuela con la punta de un lápiz, observaron con asombro que en menos de dos segundos todos los foliolos se plegaron hacia arriba y el pecíolo descendió abruptamente. Sin embargo, tras dejar la planta en reposo durante veinte minutos sin nuevos estímulos mecánicos, las hojas recuperaron exactamente su posición extendida original, independientemente de la dirección desde la cual se había aplicado el toque con el lápiz.",
+        stem: "¿Qué mecanismo fisiológico explica de forma precisa la rapidez, reversibilidad y no direccionalidad observada en las hojas de Mimosa pudica frente al estímulo táctil?",
+        options: [
+          "A. Una sismonastia regulada por potenciales de acción eléctricos que abren canales iónicos en los pulvinos (engrosamientos en la base foliar), causando la salida masiva de iones K+ y agua por ósmosis, con pérdida súbita de presión de turgencia.",
+          "B. Un tigmotropismo positivo ultrarrápido en el cual las auxinas viajan desde el ápice hasta los foliolos en milisegundos, produciendo una elongación celular irreversible en el envés de la hoja.",
+          "C. Una fotonastia negativa provocada por la sombra momentánea que proyectó el lápiz sobre los cloroplastos, deteniendo la fotosíntesis y marchitando definitivamente el tejido epidérmico.",
+          "D. Una contracción de fibras musculares estriadas presentes en el xilema de las leguminosas, las cuales consumen glucógeno para cerrar las hojas y evitar la depredación por insectos."
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 4,
+        type: "closed",
+        competence: "Indagación",
+        topic: "Experimento de Hidrotropismo Radicular",
+        context: "Para poner a prueba cómo interactúan diferentes estímulos ambientales sobre las raíces, un equipo de estudiantes de 8° construyó un terrario con paredes de vidrio lleno de aserrín completamente seco. En el centro sembraron plántulas de lenteja y, hacia el extremo derecho del terrario, enterraron una pequeña vasija de arcilla porosa llena de agua que mantenía húmedo únicamente ese sector lateral. Al cabo de seis días, observaron que las raíces primarias empezaron a crecer hacia abajo por efecto de la gravedad, pero luego se desviaron formando un ángulo de casi 55° hacia la derecha, dirigiéndose directamente hacia la pared húmeda de la vasija de arcilla.",
+        stem: "A partir de las evidencias recolectadas en este montaje de vidrio, ¿qué conclusión científica es válida respecto a la respuesta de las raíces de lenteja?",
+        options: [
+          "A. Las raíces presentan hidrotropismo negativo, ya que huyen del exceso de humedad para evitar la pudrición de la cofia radicular por falta de oxígeno.",
+          "B. Las raíces exhiben hidrotropismo positivo hacia el gradiente de mayor potencial hídrico, una respuesta direccional de crecimiento capaz de superar parcialmente la orientación vertical del gravitropismo positivo.",
+          "C. El movimiento observado corresponde a una hidronastia temporal, por lo cual si se retira la vasija de arcilla, las raíces ya formadas regresarán en pocos segundos a su posición vertical.",
+          "D. El aserrín seco del lado izquierdo emitió auxinas gaseosas que atrajeron los tallos hacia abajo e impidieron la absorción de sales minerales en la zona pilífera."
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 5,
+        type: "closed",
+        competence: "Indagación",
+        topic: "Experimentos Clásicos de Coleóptilos y Auxinas",
+        context: "Para profundizar en los resultados del experimento escolar de tropismos, el docente Cristian David Ayazo presentó en clase los experimentos clásicos de Charles Darwin y Peter Boysen-Jensen con coleóptilos de avena expuestos a luz lateral derecha: en el Lote 1 (planta intacta) el tallo se curvó hacia la luz; en el Lote 2 (ápice cortado) el tallo no creció ni se curvó; en el Lote 3 (ápice cubierto con un capuchón opaco a la luz) el tallo creció recto sin curvarse; y en el Lote 4 (ápice cortado y recolocado sobre un bloque permeable de gelatina/agar) el tallo recuperó la capacidad de curvarse hacia la fuente de luz lateral.",
+        stem: "Analizando de manera comparativa los cuatro lotes experimentales, ¿qué demuestran rigurosamente los resultados de los Lotes 3 y 4 sobre el mecanismo del fototropismo?",
+        options: [
+          "A. Que la percepción del estímulo luminoso ocurre en la base del tallo, pero el movimiento depende de un impulso nervioso que no puede atravesar bloques de gelatina.",
+          "B. Que el ápice del coleóptilo es la región específica que percibe el estímulo luminoso y produce una señal química difusible e hidrosoluble (auxina) capaz de atravesar el agar hasta la zona de elongación.",
+          "C. Que el bloque de agar bloquea por completo el paso de las fitohormonas y obliga a la planta a curvarse únicamente por deshidratación mecánica del lado iluminado.",
+          "D. Que cualquier corte realizado en la punta de una plántula induce la muerte inmediata del meristemo e impide para siempre cualquier respuesta trópica o nástica."
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 6,
+        type: "closed",
+        competence: "Uso comprensivo del conocimiento científico",
+        topic: "Tigmotropismo vs. Tigmonastia",
+        context: "Durante la socialización de los proyectos, dos estudiantes compararon dos plantas que responden al contacto físico (estímulo mecánico): la Planta X es una enredadera de maracuyá (Passiflora edulis) cuyos zarcillos, al rozar una varilla de madera colocada en la matera, crecen enrollándose en espiral alrededor del soporte de forma permanente; la Planta Y es una venus atrapamoscas (Dionaea muscipula) cuyas hojas modificadas en forma de trampa se cierran en 0,3 segundos cuando un insecto roza dos veces sus tricomas sensitivos internos, volviendo a abrirse horas después si el estímulo no continúa.",
+        stem: "¿Cuál de las siguientes afirmaciones establece de forma correcta la diferencia fisiológica entre la respuesta de la Planta X y la respuesta de la Planta Y?",
+        options: [
+          "A. La Planta X realiza tigmonastia porque el enrollamiento del zarcillo es reversible en minutos, mientras que la Planta Y realiza tigmotropismo porque su trampa crece permanentemente hacia el insecto.",
+          "B. Ambas plantas ejecutan exactamente el mismo fenómeno de fototropismo positivo, diferenciándose únicamente en la cantidad de clorofila presente en sus hojas.",
+          "C. La Planta X presenta tigmotropismo positivo (crecimiento diferencial e irreversible orientado hacia el soporte por acción hormonal), mientras que la Planta Y presenta tigmonastia (movimiento rápido, reversible y cuya dirección de cierre está predeterminada por la anatomía de la hoja).",
+          "D. La Planta X responde mediante cambios de presión osmótica de iones K+ sin crecimiento celular, mientras que la Planta Y cierra sus hojas por acumulación lenta de estatolitos de almidón."
+        ],
+        correctIndex: 2
+      },
+      {
+        id: 7,
+        type: "closed",
+        competence: "Explicación de fenómenos",
+        topic: "Sensibilidad Diferencial de Raíces y Tallos a las Auxinas",
+        context: "Observa con atención la gráfica de la Lámina Científica (Figura 7.0), la cual muestra el porcentaje de estimulación o inhibición de la elongación celular en raíces y tallos en función de la concentración molar de auxinas (AIA). En el experimento de gravitropismo realizado semanas atrás, cuando la plántula se colocó horizontalmente, la fuerza de gravedad provocó que las auxinas se acumularan en la cara inferior tanto del tallo como de la raíz, alcanzando en esa zona inferior una concentración cercana a 10⁻⁵ M, mientras que la cara superior quedó con una concentración mucho menor (alrededor de 10⁻¹⁰ M).",
+        stem: "Según los datos cuantitativos de la gráfica de sensibilidad tisular, ¿por qué una concentración de 10⁻⁵ M de auxina en la cara inferior hace que el tallo suba y la raíz baje?",
+        options: [
+          "A. Porque a una concentración de 10⁻⁵ M el tejido del tallo alcanza su máxima estimulación de elongación celular en la cara inferior (curvándose hacia arriba), mientras que en el tejido de la raíz esa misma concentración resulta fuertemente inhibitoria en la cara inferior, permitiendo que la cara superior crezca más y curve la raíz hacia abajo.",
+          "B. Porque a 10⁻⁵ M tanto el tallo como la raíz detienen por completo su respiración celular, obligando a los cotiledones a girar mecánicamente la semilla dentro de la tierra.",
+          "C. Porque las raíces necesitan concentraciones mil veces más altas de auxina que los tallos para poder iniciar su elongación celular hacia el centro de la Tierra.",
+          "D. Porque a 10⁻¹⁰ M los tallos sufren una inhibición severa que destruye el xilema, mientras que a 10⁻⁵ M las raíces se curvan hacia arriba buscando la luz solar."
+        ],
+        correctIndex: 0
+      },
+      {
+        id: 8,
+        type: "closed",
+        competence: "Indagación",
+        topic: "Control de Variables y Etiolación en el Experimento Escolar",
+        context: "En el diseño experimental ejecutado por los estudiantes de 8°, cada equipo dividió 15 semillas idénticas de frijol en tres grupos de 5 semillas usando el mismo tipo de tierra negra, materas iguales y aplicando exactamente 30 mL de agua cada dos días: el Grupo A recibió luz cenital (desde arriba), el Grupo B recibió luz únicamente por una ventana lateral y el Grupo C permaneció en una caja completamente cerrada en oscuridad total. Al finalizar la semana, las plántulas del Grupo C eran las más altas de todas (tallos muy largos y delgados), pero presentaban un color blanco-amarillento pálido y hojas diminutas sin expandir.",
+        stem: "En relación con la metodología científica de este experimento escolar y el fenómeno observado en el Grupo C, es correcto afirmar que:",
+        options: [
+          "A. El volumen de agua y el tipo de tierra fueron las variables dependientes, y el color amarillento del Grupo C se debió a una infección por hongos causada por el exceso de auxinas.",
+          "B. La ubicación/presencia de la fuente de luz fue la variable independiente; el ángulo de curvatura y la longitud del tallo fueron las variables dependientes; y el Grupo C experimentó etiolación (alargamiento rápido en oscuridad buscando luz sin síntesis de clorofila).",
+          "C. El Grupo C demostró que la fotosíntesis es mucho más eficiente en la oscuridad total, razón por la cual las plantas alcanzaron mayor estatura que en los Grupos A y B.",
+          "D. No existió control de variables en el experimento porque los estudiantes debieron usar semillas de diferentes especies en cada caja para obtener resultados comparables."
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 9,
+        type: "closed",
+        competence: "Uso comprensivo del conocimiento científico",
+        topic: "Fotonastia y Nictinastia en Órganos Foliares y Florales",
+        context: "Al comparar el comportamiento de su planta experimental de frijol durante un ciclo completo de 24 horas, una estudiante notó que, además de la curvatura permanente del tallo hacia la ventana (fototropismo), las láminas de las hojas compuestas del frijol se mantenían extendidas horizontalmente durante el día para captar radiación solar, pero al llegar la noche descendían y se plegaban verticalmente ('movimiento de sueño'), volviendo a levantarse al amanecer. Asimismo, observó que las flores de diente de león del patio abrían sus pétalos al mediodía soleado y los cerraban al anochecer o en días muy nublados.",
+        stem: "¿Cómo se denominan estos movimientos periódicos y reversibles sincronizados con la variación de intensidad lumínica entre el día y la noche, y cuál es su importancia adaptativa?",
+        options: [
+          "A. Se denominan fototropismos circadianos irreversibles, y su función es transformar las hojas en raíces aéreas durante la noche.",
+          "B. Se denominan nictinastias (en las hojas durante la noche) y fotonastias (en las flores ante la intensidad de luz); son movimientos reversibles por cambios de turgencia en los pulvinos o crecimiento diferencial reversible que reducen la pérdida de calor nocturno y protegen el polen de la humedad.",
+          "C. Se denominan gravitropismos solares, ya que dependen de la atracción gravitatoria de la Luna sobre la savia elaborada del floema durante la madrugada.",
+          "D. Se denominan quimiotropismos negativos, causados por la acumulación tóxica de dióxido de carbono dentro de las vacuolas cuando se detiene la fase lumínica."
+        ],
+        correctIndex: 1
+      },
+      {
+        id: 10,
+        type: "closed",
+        competence: "Explicación de fenómenos",
+        topic: "Percepción de la Gravedad por Estatolitos en la Cofia",
+        context: "Cuando los estudiantes de 8° indagaron cómo hace la raíz de sus plántulas experimentales para 'saber' hacia dónde está el centro de la Tierra, encontraron que en el extremo apical de la raíz (la cofia o caliptra) existen células especializadas llamadas estatocitos. Dentro del citoplasma de estos estatocitos se encuentran unos organelos densos llenos de gránulos de almidón denominados amiloplastos o estatolitos (ver Lámina Científica Figura 10.0). En un laboratorio espacial en microgravedad o cuando se extirpa quirúrgicamente la cofia radicular sin dañar la zona de elongación, la raíz sigue creciendo pero pierde por completo la capacidad de curvarse hacia abajo al ser girada.",
+        stem: "Según esta evidencia citológica y experimental, ¿cuál es la función específica de los estatolitos (amiloplastos) dentro de las células de la cofia radicular?",
+        options: [
+          "A. Digerir el almidón para liberar calor y derretir mecánicamente las partículas de roca que impiden el paso de la raíz hacia el subsuelo.",
+          "B. Sedimentar por su alta densidad hacia la parte físicamente más baja del estatocito cuando cambia la orientación de la raíz, ejerciendo presión sobre el citoesqueleto y el retículo endoplasmático para redirigir las proteínas transportadoras de auxina (PIN) hacia la cara inferior.",
+          "C. Bombear activamente clorofila hacia los pelos absorbentes para que la raíz pueda realizar fotosíntesis subterránea cuando la semilla se queda sin reservas.",
+          "D. Bloquear la entrada de agua en la cofia para generar una sismonastia instantánea cada vez que la raíz choca contra un grano de arena."
+        ],
+        correctIndex: 1
+      },
+
+      // ================= PARTE II: 5 PREGUNTAS ABIERTAS (0.26 pts c/u) =================
+      {
+        id: 11,
+        type: "open",
+        competence: "Indagación y Explicación de fenómenos",
+        topic: "Análisis del Experimento Escolar de Fototropismo y Etiolación",
+        context: "Durante el experimento desarrollado semanas atrás por grado 8°, se compararon plántulas crecidas en cajas con entrada lateral de luz frente a plántulas crecidas en oscuridad total. Mientras las primeras curvaron sus tallos verdes hacia el orificio iluminado, las segundas desarrollaron tallos excesivamente largos, débiles y de color blanco-amarillento (etiolación).",
+        stem: "11. A partir de tu experiencia práctica con el experimento de las plantas, describe detalladamente cómo fue el montaje que realizaste, qué cambios físicos observaste día a día en los tallos y hojas, y explica científicamente cómo actuaron las auxinas (AIA) para curvar el tallo hacia la luz y por qué las plantas en oscuridad sufren etiolación."
+      },
+      {
+        id: 12,
+        type: "open",
+        competence: "Explicación de fenómenos",
+        topic: "Comportamiento Opuesto de Tallo y Raíz en el Gravitropismo",
+        context: "Al colocar una plántula germinada en posición horizontal (acostada a 90°), tanto en el tallo como en la raíz las auxinas (AIA) se acumulan en la cara inferior por acción de la gravedad y la sedimentación de los estatolitos. Sin embargo, el tallo responde doblándose hacia arriba y la raíz responde doblándose hacia abajo.",
+        stem: "12. Explica con rigor biológico por qué, si las auxinas se acumulan en la misma cara inferior tanto del tallo como de la raíz cuando se voltea horizontalmente una matera del experimento, el tallo termina curvándose hacia arriba (gravitropismo negativo) mientras que la raíz se curva hacia abajo (gravitropismo positivo)."
+      },
+      {
+        id: 13,
+        type: "open",
+        competence: "Uso comprensivo del conocimiento científico",
+        topic: "Diferenciación Fisiológica entre Tropismos y Nastias",
+        context: "En el reino vegetal coexisten dos grandes categorías de respuestas de movimiento frente a los estímulos del entorno: los tropismos (como el fototropismo del frijol de nuestro experimento) y las nastias (como el cierre súbito de las hojas de Mimosa pudica o de la trampa de Dionaea muscipula).",
+        stem: "13. Establece una comparación científica completa entre los tropismos y las nastias, explicando sus diferencias en cuanto a: (a) influencia de la dirección del estímulo, (b) velocidad y reversibilidad de la respuesta, y (c) mecanismo celular que los produce (elongación por auxinas frente a cambios de presión de turgencia por iones K+ y agua en los pulvinos)."
+      },
+      {
+        id: 14,
+        type: "open",
+        competence: "Indagación",
+        topic: "Control de Variables y Evaluación Metodológica del Experimento",
+        context: "Todo experimento científico riguroso en biología vegetal requiere identificar con precisión la variable independiente, la variable dependiente y mantener constantes las variables controladas (intervinientes), además de contar con un grupo control que permita validar la hipótesis planteada.",
+        stem: "14. Evalúa la metodología del experimento sobre tropismos que desarrollaste semanas atrás: identifica cuál fue la variable independiente, cuál fue la variable dependiente, menciona al menos tres variables que debieron mantenerse constantes (controladas) y explica qué errores experimentales podrían alterar los resultados y cómo los evitaste o corregirías."
+      },
+      {
+        id: 15,
+        type: "open",
+        competence: "Indagación y Uso comprensivo del conocimiento",
+        topic: "Propuesta Experimental e Importancia Adaptativa en la Creación",
+        context: "A diferencia de los animales, las plantas son organismos sésiles (fijos al sustrato) que no pueden desplazarse de un lugar a otro para buscar alimento, agua o refugio. Sin embargo, han sido diseñadas con sistemas precisos de percepción y respuesta como el hidrotropismo, el tigmotropismo y las nastias.",
+        stem: "15. Propón un nuevo diseño experimental escolar para comprobar simultáneamente el hidrotropismo radicular y el tigmotropismo caulinar en una planta trepadora, e interpreta cómo la combinación de tropismos y nastias garantiza la supervivencia, nutrición y defensa de las plantas dentro de los ecosistemas."
+      }
+    ];
+
+    /*************************************************************************
+     * 5. ESTADO GLOBAL DE LA EVALUACIÓN Y SUPER-SUPERVISIÓN
+     *************************************************************************/
+    let examState = {
+      started: false,
+      finished: false,
+      studentName: "",
+      startTimestamp: null,
+      endTimestamp: null,
+      currentIndex: 0,
+      remainingSeconds: CONFIG.closedTimeSeconds,
+      timerInterval: null,
+      closedAnswers: new Array(CONFIG.closedCount).fill(null),
+      openAnswers: new Array(CONFIG.openCount).fill(""),
+      penalties: [], // { time, reason, points }
+      lastUserActivity: Date.now(),
+      lastPenaltyTime: 0,
+      audioContext: null,
+      analyser: null,
+      micStream: null,
+      noiseInterval: null,
+      lastNoisePenaltyTime: 0
+    };
+
+    /*************************************************************************
+     * 6. RELOJ EN VIVO Y VALIDACIÓN DE NOMBRE EN PANTALLA DE BIENVENIDA
+     *************************************************************************/
+    function updateLiveClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+      });
+      const dateStr = now.toLocaleDateString("es-CO", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+      const clockEl = document.getElementById("liveClockDisplay");
+      if (clockEl) {
+        clockEl.textContent = `${dateStr} • ${timeStr}`;
+      }
+
+      // Si scheduleEnabled estuviese activo, verificar ventana horaria
+      if (CONFIG.scheduleEnabled && examState.started && !examState.finished) {
+        const [endH, endM] = CONFIG.endTime.split(":").map(Number);
+        if (now.getHours() > endH || (now.getHours() === endH && now.getMinutes() >= endM)) {
+          showToast("⏰ Se ha cumplido la hora límite programada. Enviando examen...", "warning");
+          finishExam();
+        }
+      }
+    }
+
+    function validateStudentName() {
+      const input = document.getElementById("studentNameInput");
+      const btn = document.getElementById("startExamBtn");
+      const msg = document.getElementById("nameValidationMsg");
+      const raw = input.value.trim().replace(/\s+/g, " ");
+      const words = raw.split(" ").filter(w => w.length >= 2);
+
+      if (words.length >= 2) {
+        btn.disabled = false;
+        btn.className = "w-full py-4 rounded-xl font-extrabold text-base uppercase tracking-wider transition flex items-center justify-center gap-2 bg-gradient-to-r from-gold-500 to-emerald-600 hover:from-gold-400 hover:to-emerald-500 text-navy-900 shadow-xl cursor-pointer";
+        msg.textContent = "✓ Nombre válido. Haz clic en el botón para comenzar la evaluación en pantalla completa.";
+        msg.className = "text-xs text-emerald-400 font-semibold mt-1.5";
+      } else {
+        btn.disabled = true;
+        btn.className = "w-full py-4 rounded-xl font-extrabold text-base uppercase tracking-wider transition flex items-center justify-center gap-2 bg-slate-700 text-slate-400 cursor-not-allowed";
+        msg.textContent = "* Ingresa tu nombre y al menos un apellido real (mínimo 2 palabras) para habilitar el inicio.";
+        msg.className = "text-xs text-amber-300 mt-1.5";
+      }
+    }
+
+    /*************************************************************************
+     * 7. INICIO DEL EXAMEN, PANTALLA COMPLETA Y SONÓMETRO AL 60%
+     *************************************************************************/
+    function startExam(bypassSchedule = false) {
+      const nameInput = document.getElementById("studentNameInput");
+      let fullName = nameInput.value.trim().replace(/\s+/g, " ");
+      if (fullName.split(" ").filter(w => w.length >= 2).length < 2) {
+        if (bypassSchedule) {
+          fullName = "Estudiante Autorizado Docente";
+          nameInput.value = fullName;
+        } else {
+          showToast("Por favor escribe tu nombre y apellidos completos.", "error");
+          return;
+        }
+      }
+
+      examState.studentName = fullName;
+      examState.started = true;
+      examState.finished = false;
+      examState.startTimestamp = new Date();
+      examState.currentIndex = 0;
+      examState.lastUserActivity = Date.now();
+
+      document.getElementById("activeStudentName").textContent = fullName;
+      document.getElementById("welcomeScreen").classList.add("hidden");
+      document.getElementById("examScreen").classList.remove("hidden");
+
+      requestExamFullscreen();
+      initMicrophoneMonitor();
+      loadQuestion(0);
+    }
+
+    function requestExamFullscreen() {
+      const elem = document.documentElement;
+      try {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen().catch(() => {});
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        }
+      } catch (e) {}
+    }
+
+    function returnToFullscreen() {
+      document.getElementById("fullscreenModal").classList.add("hidden");
+      requestExamFullscreen();
+    }
+
+    async function initMicrophoneMonitor() {
+      const widget = document.getElementById("noiseWidget");
+      const bar = document.getElementById("noiseBar");
+      const text = document.getElementById("noiseValueText");
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        examState.micStream = stream;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioCtx();
+        const source = audioCtx.createMediaStreamSource(stream);
+        const analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+
+        examState.audioContext = audioCtx;
+        examState.analyser = analyser;
+        widget.classList.remove("hidden");
+        widget.classList.add("flex");
+
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+        examState.noiseInterval = setInterval(() => {
+          if (!examState.started || examState.finished) return;
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i];
+          }
+          const avg = sum / dataArray.length;
+          const percent = Math.min(100, Math.round((avg / 135) * 100));
+
+          bar.style.width = `${percent}%`;
+          text.textContent = `${percent}%`;
+
+          if (percent >= CONFIG.noiseThresholdPercent) {
+            bar.className = "h-full bg-red-500 transition-all duration-150";
+            text.className = "font-bold text-red-400";
+            const now = Date.now();
+            if (now - examState.lastNoisePenaltyTime > 10000) {
+              examState.lastNoisePenaltyTime = now;
+              applyPenalty(`Ruido ambiental excesivo detectado (${percent}% >= 60%)`);
+            }
+          } else if (percent >= 42) {
+            bar.className = "h-full bg-amber-400 transition-all duration-150";
+            text.className = "font-bold text-amber-300";
+          } else {
+            bar.className = "h-full bg-emerald-500 transition-all duration-150";
+            text.className = "font-bold text-emerald-400";
+          }
+        }, 250);
+      } catch (err) {
+        // Modo opcional sin bloquear el examen si el dispositivo no tiene micrófono
+        showToast("Sonómetro en modo pasivo (micrófono no detectado o sin permiso).", "info");
+      }
+    }
+
+    /*************************************************************************
+     * 8. RENDERIZADO DE PREGUNTAS CERRADAS (1-10) Y ABIERTAS (11-15)
+     *************************************************************************/
+    function loadQuestion(index) {
+      examState.currentIndex = index;
+      const q = QUESTIONS[index];
+      const totalQ = QUESTIONS.length;
+
+      // Actualizar contadores e insignias
+      document.getElementById("questionCounterBadge").textContent = `Pregunta ${index + 1} de ${totalQ}`;
+      const progressPercent = (((index + 1) / totalQ) * 100).toFixed(2);
+      document.getElementById("examProgressBar").style.width = `${progressPercent}%`;
+
+      const sectionBadge = document.getElementById("sectionTypeBadge");
+      if (q.type === "closed") {
+        const ptsPerClosed = (CONFIG.closedBlockPoints / CONFIG.closedCount).toFixed(2);
+        sectionBadge.textContent = `Parte I: Pregunta Cerrada (${ptsPerClosed} pts)`;
+        sectionBadge.className = "text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-bold";
+      } else {
+        const ptsPerOpen = (CONFIG.openBlockPoints / CONFIG.openCount).toFixed(2);
+        sectionBadge.textContent = `Parte II: Pregunta Abierta (${ptsPerOpen} pts)`;
+        sectionBadge.className = "text-xs px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-400/40 font-bold";
+      }
+
+      document.getElementById("competenceBadge").textContent = `Competencia: ${q.competence}`;
+      document.getElementById("topicBadge").textContent = `Tema: ${q.topic}`;
+      document.getElementById("svgFigureLabel").textContent = `LÁMINA ${index + 1}.0 • GRADO 8°`;
+      document.getElementById("svgContainer").innerHTML = SVG_ILLUSTRATIONS[index] || SVG_ILLUSTRATIONS[0];
+      document.getElementById("questionContextText").textContent = q.context;
+      document.getElementById("questionStemText").textContent = q.stem;
+
+      const closedContainer = document.getElementById("closedOptionsContainer");
+      const openContainer = document.getElementById("openQuestionContainer");
+
+      if (q.type === "closed") {
+        closedContainer.classList.remove("hidden");
+        openContainer.classList.add("hidden");
+        renderClosedOptions(q, index);
+        examState.remainingSeconds = CONFIG.closedTimeSeconds;
+      } else {
+        closedContainer.classList.add("hidden");
+        openContainer.classList.remove("hidden");
+        const openIdx = index - CONFIG.closedCount;
+        const textarea = document.getElementById("openAnswerTextarea");
+        textarea.value = examState.openAnswers[openIdx] || "";
+        handleOpenAnswerInput();
+        examState.remainingSeconds = CONFIG.openTimeSeconds;
+      }
+
+      // Etiqueta del botón siguiente
+      const nextBtnLabel = document.getElementById("nextBtnLabel");
+      if (index === totalQ - 1) {
+        nextBtnLabel.textContent = "Finalizar Evaluación y Generar Reporte";
+      } else if (index === CONFIG.closedCount - 1) {
+        nextBtnLabel.textContent = "Pasar a la Parte II (Preguntas Abiertas)";
+      } else {
+        nextBtnLabel.textContent = "Siguiente Pregunta";
+      }
+
+      startQuestionTimer();
+      updateNextButtonState();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderClosedOptions(q, qIndex) {
+      const container = document.getElementById("closedOptionsContainer");
+      container.innerHTML = "";
+      const selected = examState.closedAnswers[qIndex];
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        const isSelected = selected === optIdx;
+        btn.className = `option-btn w-full text-left p-4 rounded-xl border transition flex items-start gap-3 ${
+          isSelected
+            ? "option-selected text-white"
+            : "bg-navy-900/80 border-white/15 text-slate-200 hover:bg-navy-800/90"
+        }`;
+        btn.onclick = () => selectClosedOption(qIndex, optIdx);
+
+        const letter = ["A", "B", "C", "D"][optIdx];
+        btn.innerHTML = `
+          <span class="w-7 h-7 rounded-lg flex items-center justify-center font-extrabold text-xs shrink-0 mt-0.5 ${
+            isSelected ? "bg-gold-500 text-navy-900" : "bg-navy-700 text-gold-400 border border-gold-500/30"
+          }">${letter}</span>
+          <span class="text-sm sm:text-base leading-relaxed font-medium">${optText.substring(3)}</span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function selectClosedOption(qIndex, optIdx) {
+      examState.closedAnswers[qIndex] = optIdx;
+      renderClosedOptions(QUESTIONS[qIndex], qIndex);
+      updateNextButtonState();
+    }
+
+    /*************************************************************************
+     * 9. VALIDACIÓN DE COHERENCIA Y 4 LÍNEAS EN PREGUNTAS ABIERTAS
+     *************************************************************************/
+    function evaluateOpenCoherence(text) {
+      const clean = text.trim().replace(/\s+/g, " ");
+      if (!clean) return { valid: false, lines: 0, words: 0, uniqueRatio: 0 };
+
+      const wordsArr = clean.split(" ").filter(w => w.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, "").length >= 2);
+      const wordCount = wordsArr.length;
+
+      // Cálculo de líneas efectivas (~70 caracteres por línea o saltos con contenido real)
+      const charLines = Math.floor(clean.length / 68);
+      const explicitLines = text
+        .split("\n")
+        .filter(line => line.trim().split(/\s+/).filter(Boolean).length >= 5).length;
+      const effectiveLines = Math.max(charLines, explicitLines);
+
+      // Verificar diversidad léxica y evitar caracteres repetitivos tipo "aaaa"
+      const uniqueWords = new Set(wordsArr.map(w => w.toLowerCase()));
+      const uniqueRatio = wordCount > 0 ? uniqueWords.size / wordCount : 0;
+      const hasRepeatedGarbage = /(.)\1{4,}/.test(clean);
+
+      const isValid =
+        effectiveLines >= CONFIG.minOpenLines &&
+        wordCount >= CONFIG.minOpenWords &&
+        uniqueWords.size >= 14 &&
+        uniqueRatio >= 0.42 &&
+        !hasRepeatedGarbage;
+
+      return {
+        valid: isValid,
+        lines: Math.min(effectiveLines, 10),
+        words: wordCount
+      };
+    }
+
+    function handleOpenAnswerInput() {
+      const qIndex = examState.currentIndex;
+      if (qIndex < CONFIG.closedCount) return;
+      const openIdx = qIndex - CONFIG.closedCount;
+      const textarea = document.getElementById("openAnswerTextarea");
+      const text = textarea.value;
+      examState.openAnswers[openIdx] = text;
+
+      const evalRes = evaluateOpenCoherence(text);
+      const badge = document.getElementById("openLinesCounter");
+      badge.textContent = `Líneas efectivas: ${evalRes.lines} / ${CONFIG.minOpenLines} | Palabras: ${evalRes.words} / ${CONFIG.minOpenWords}`;
+
+      if (evalRes.valid) {
+        badge.className = "px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-400/40";
+      } else {
+        badge.className = "px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 font-bold border border-amber-400/30";
+      }
+
+      updateNextButtonState();
+    }
+
+    /*************************************************************************
+     * 10. TEMPORIZADOR OBLIGATORIO POR PREGUNTA (90s CERRADAS / 600s ABIERTAS)
+     *************************************************************************/
+    function startQuestionTimer() {
+      if (examState.timerInterval) clearInterval(examState.timerInterval);
+      renderTimerDisplay();
+
+      examState.timerInterval = setInterval(() => {
+        if (!examState.started || examState.finished) return;
+        if (examState.remainingSeconds > 0) {
+          examState.remainingSeconds--;
+          renderTimerDisplay();
+          if (examState.remainingSeconds === 0) {
+            updateNextButtonState();
+            showToast("⏱️ Tiempo mínimo cumplido. Ya puedes avanzar si completaste tu respuesta.", "info");
+          }
+        }
+      }, 1000);
+    }
+
+    function renderTimerDisplay() {
+      const min = String(Math.floor(examState.remainingSeconds / 60)).padStart(2, "0");
+      const sec = String(examState.remainingSeconds % 60).padStart(2, "0");
+      const timerEl = document.getElementById("questionTimerDisplay");
+      timerEl.textContent = `${min}:${sec}`;
+      if (examState.remainingSeconds === 0) {
+        timerEl.className = "text-lg sm:text-xl font-mono font-extrabold text-emerald-400";
+      } else {
+        timerEl.className = "text-lg sm:text-xl font-mono font-extrabold text-white";
+      }
+    }
+
+    function updateNextButtonState() {
+      const q = QUESTIONS[examState.currentIndex];
+      const nextBtn = document.getElementById("nextQuestionBtn");
+      const lockText = document.getElementById("lockReasonText");
+      const timeReady = examState.remainingSeconds <= 0;
+
+      let answerReady = false;
+      if (q.type === "closed") {
+        answerReady = examState.closedAnswers[examState.currentIndex] !== null;
+      } else {
+        const openIdx = examState.currentIndex - CONFIG.closedCount;
+        answerReady = evaluateOpenCoherence(examState.openAnswers[openIdx] || "").valid;
+      }
+
+      if (timeReady && answerReady) {
+        nextBtn.disabled = false;
+        nextBtn.className = "w-full sm:w-auto px-7 py-3.5 rounded-xl font-extrabold text-sm uppercase tracking-wider transition flex items-center justify-center gap-2 bg-gradient-to-r from-gold-500 to-emerald-500 hover:from-gold-400 hover:to-emerald-400 text-navy-900 shadow-lg cursor-pointer shrink-0";
+        lockText.textContent = "✓ Respuesta y tiempo validados. Puedes avanzar a la siguiente pregunta.";
+        lockText.className = "text-xs sm:text-sm text-emerald-400 font-semibold";
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.className = "w-full sm:w-auto px-7 py-3.5 rounded-xl font-extrabold text-sm uppercase tracking-wider transition flex items-center justify-center gap-2 bg-slate-700 text-slate-400 cursor-not-allowed shrink-0";
+        if (!timeReady && !answerReady) {
+          lockText.textContent = q.type === "closed"
+            ? "🔒 Espera a que el temporizador llegue a 00:00 y selecciona una opción (A, B, C o D)."
+            : "🔒 Espera a que el reloj llegue a 00:00 y redacta mínimo 4 líneas coherentes (28 palabras).";
+        } else if (!timeReady) {
+          lockText.textContent = "⏳ Respuesta registrada. Espera a que el temporizador llegue a 00:00 para avanzar.";
+        } else {
+          lockText.textContent = q.type === "closed"
+            ? "✍️ Tiempo cumplido. Selecciona una opción (A, B, C o D) para continuar."
+            : "✍️ Tiempo cumplido. Completa al menos 4 líneas coherentes (mínimo 28 palabras) para avanzar.";
+        }
+        lockText.className = "text-xs sm:text-sm text-amber-300 font-medium";
+      }
+    }
+
+    function goToNextQuestion() {
+      if (examState.currentIndex < QUESTIONS.length - 1) {
+        loadQuestion(examState.currentIndex + 1);
+      } else {
+        finishExam();
+      }
+    }
+
+    /*************************************************************************
+     * 11. SUPERVISIÓN ANTIFRAUDE (PESTAÑAS CON UMBRAL DE 7.5s Y PANTALLA COMPLETA)
+     *************************************************************************/
+    ["mousemove", "mousedown", "keydown", "touchstart", "scroll"].forEach(evt => {
+      window.addEventListener(evt, () => {
+        examState.lastUserActivity = Date.now();
+      }, { passive: true });
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!examState.started || examState.finished) return;
+      if (document.hidden) {
+        const idleMs = Date.now() - examState.lastUserActivity;
+        // Si la inactividad previa es menor a 7.5 segundos, fue un cambio activo de pestaña/app
+        if (idleMs < CONFIG.inactivityThresholdMs) {
+          applyPenalty("Cambio de pestaña o salida de la aplicación detectada");
+        }
+      }
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+      if (!examState.started || examState.finished) return;
+      const teacherModalOpen = !document.getElementById("teacherModal").classList.contains("hidden");
+      if (!document.fullscreenElement && !teacherModalOpen) {
+        document.getElementById("fullscreenModal").classList.remove("hidden");
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+      const key = e.key.toLowerCase();
+      if (
+        e.key === "F12" ||
+        ((e.ctrlKey || e.metaKey) && ["c", "v", "x", "u", "s", "p"].includes(key))
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    function applyPenalty(reason) {
+      const now = Date.now();
+      if (now - examState.lastPenaltyTime < 3000) return;
+      examState.lastPenaltyTime = now;
+
+      const timeStr = new Date().toLocaleTimeString("es-CO", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+      examState.penalties.push({
+        time: timeStr,
+        reason: reason,
+        points: CONFIG.penaltyPoints
+      });
+
+      const totalDeducted = (examState.penalties.length * CONFIG.penaltyPoints).toFixed(1);
+      const counterEl = document.getElementById("penaltyCounterText");
+      if (counterEl) {
+        counterEl.textContent = `-${totalDeducted} pts (${examState.penalties.length})`;
+      }
+
+      showToast(`⚠️ Penalización (-0.5 pts): ${reason}`, "error");
+    }
+
+    /*************************************************************************
+     * 12. PANEL DE CONTROL EXCLUSIVO DEL DOCENTE (CLAVE: dmar2026)
+     *************************************************************************/
+    function openTeacherModal() {
+      document.getElementById("teacherModal").classList.remove("hidden");
+      document.getElementById("teacherPassInput").value = "";
+      document.getElementById("teacherAuthError").classList.add("hidden");
+      document.getElementById("teacherLoginBox").classList.remove("hidden");
+      document.getElementById("teacherControlsBox").classList.add("hidden");
+    }
+
+    function closeTeacherModal() {
+      document.getElementById("teacherModal").classList.add("hidden");
+    }
+
+    function verifyTeacherPassword() {
+      const val = document.getElementById("teacherPassInput").value.trim();
+      if (val === "dmar2026" || val === "0323") {
+        document.getElementById("teacherLoginBox").classList.add("hidden");
+        document.getElementById("teacherControlsBox").classList.remove("hidden");
+        document.getElementById("teacherAuthError").classList.add("hidden");
+      } else {
+        document.getElementById("teacherAuthError").classList.remove("hidden");
+      }
+    }
+
+    // Botón Docente 1: Ingresar / Desbloquear Examen Ahora
+    function teacherActionUnlockNow() {
+      closeTeacherModal();
+      if (!examState.started) {
+        startExam(true);
+        showToast("🔓 Examen iniciado por autorización del docente.", "success");
+      } else if (!examState.finished) {
+        examState.remainingSeconds = 0;
+        renderTimerDisplay();
+        updateNextButtonState();
+        showToast("🔓 Temporizador de la pregunta actual liberado a 00:00.", "success");
+      }
+    }
+
+    // Botón Docente 2: Avanzar a la Siguiente Pregunta
+    function teacherActionNextQuestion() {
+      closeTeacherModal();
+      if (!examState.started) {
+        startExam(true);
+        return;
+      }
+      if (examState.currentIndex < QUESTIONS.length - 1) {
+        loadQuestion(examState.currentIndex + 1);
+        showToast(`⏭️ Avance docente a la Pregunta ${examState.currentIndex + 1}.`, "info");
+      } else {
+        finishExam();
+      }
+    }
+
+    // Botón Docente 3: Ir a Preguntas Abiertas (índice dinámico Nc = 10) / Finalizar Abiertas
+    function teacherActionJumpToOpen() {
+      closeTeacherModal();
+      if (!examState.started) {
+        startExam(true);
+      }
+      if (examState.currentIndex < CONFIG.closedCount) {
+        loadQuestion(CONFIG.closedCount); // Salta exactamente a la Pregunta 11 (índice 10)
+        showToast("📝 Salto directo al bloque de 5 Preguntas Abiertas (Pregunta 11).", "info");
+      } else {
+        finishExam();
+      }
+    }
+
+    // Botón Docente 4: Finalizar por Completo el Examen
+    function teacherActionFinishExam() {
+      closeTeacherModal();
+      if (!examState.started) {
+        examState.studentName = document.getElementById("studentNameInput").value.trim() || "Estudiante Autorizado Docente";
+        examState.started = true;
+        examState.startTimestamp = new Date();
+      }
+      finishExam();
+    }
+
+    /*************************************************************************
+     * 13. CÁLCULO DE RESULTADOS SOBRE 5.00 PTS, CÓDIGO QR Y REPORTE PDF
+     *************************************************************************/
+    function calculateFinalScore() {
+      const ptsPerClosed = CONFIG.closedBlockPoints / CONFIG.closedCount; // 0.37
+      const ptsPerOpen = CONFIG.openBlockPoints / CONFIG.openCount;       // 0.26
+
+      let correctClosed = 0;
+      let answeredClosed = 0;
+      for (let i = 0; i < CONFIG.closedCount; i++) {
+        if (examState.closedAnswers[i] !== null) {
+          answeredClosed++;
+          if (examState.closedAnswers[i] === QUESTIONS[i].correctIndex) {
+            correctClosed++;
+          }
+        }
+      }
+
+      let validOpen = 0;
+      for (let j = 0; j < CONFIG.openCount; j++) {
+        const text = examState.openAnswers[j] || "";
+        if (evaluateOpenCoherence(text).valid) {
+          validOpen++;
+        }
+      }
+
+      const closedScore = correctClosed * ptsPerClosed;
+      const openScore = validOpen * ptsPerOpen;
+      const baseScore = closedScore + openScore;
+      const totalPenalty = examState.penalties.length * CONFIG.penaltyPoints;
+      const finalGrade = Math.max(0, Math.min(5.0, baseScore - totalPenalty));
+
+      return {
+        correctClosed,
+        incorrectClosed: CONFIG.closedCount - correctClosed,
+        answeredClosed,
+        validOpen,
+        totalAnswered: answeredClosed + validOpen,
+        closedScore,
+        openScore,
+        baseScore,
+        totalPenalty,
+        finalGrade
+      };
+    }
+
+    function finishExam() {
+      if (examState.finished) return;
+      examState.finished = true;
+      examState.endTimestamp = new Date();
+
+      if (examState.timerInterval) clearInterval(examState.timerInterval);
+      if (examState.noiseInterval) clearInterval(examState.noiseInterval);
+      if (examState.micStream) {
+        examState.micStream.getTracks().forEach(t => t.stop());
+      }
+
+      document.getElementById("fullscreenModal").classList.add("hidden");
+      document.getElementById("noiseWidget").classList.add("hidden");
+      document.getElementById("topBannerHeader").classList.add("hidden");
+      document.getElementById("welcomeScreen").classList.add("hidden");
+      document.getElementById("examScreen").classList.add("hidden");
+      document.getElementById("resultsScreen").classList.remove("hidden");
+
+      const stats = calculateFinalScore();
+
+      document.getElementById("resStudentName").textContent = examState.studentName;
+      document.getElementById("resFinalGrade").textContent = `${stats.finalGrade.toFixed(2)} / 5.00`;
+
+      const perfBadge = document.getElementById("resPerformanceBadge");
+      if (stats.finalGrade >= 4.6) {
+        perfBadge.textContent = "Desempeño Superior";
+        perfBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 inline-block";
+      } else if (stats.finalGrade >= 4.0) {
+        perfBadge.textContent = "Desempeño Alto";
+        perfBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 inline-block";
+      } else if (stats.finalGrade >= 3.0) {
+        perfBadge.textContent = "Desempeño Básico";
+        perfBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 inline-block";
+      } else {
+        perfBadge.textContent = "Desempeño Bajo";
+        perfBadge.className = "text-xs font-bold px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 inline-block";
+      }
+
+      document.getElementById("resClosedCorrect").textContent = `${stats.correctClosed} / ${CONFIG.closedCount}`;
+      document.getElementById("resClosedPoints").textContent = `${stats.closedScore.toFixed(2)} / ${CONFIG.closedBlockPoints.toFixed(2)} pts`;
+
+      document.getElementById("resOpenCompleted").textContent = `${stats.validOpen} / ${CONFIG.openCount}`;
+      document.getElementById("resOpenPoints").textContent = `${stats.openScore.toFixed(2)} / ${CONFIG.openBlockPoints.toFixed(2)} pts`;
+
+      document.getElementById("resPenaltiesTotal").textContent = `-${stats.totalPenalty.toFixed(2)} pts`;
+      document.getElementById("resPenaltiesCount").textContent = `${examState.penalties.length} infracción(es)`;
+
+      const startStr = examState.startTimestamp.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+      const endStr = examState.endTimestamp.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit" });
+      const dateStr = examState.endTimestamp.toLocaleDateString("es-CO");
+
+      document.getElementById("resTimeSpan").textContent = `${startStr} a ${endStr}`;
+      document.getElementById("resDateText").textContent = dateStr;
+
+      renderQR(stats, dateStr, startStr, endStr);
+      renderResultsBreakdown();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderQR(stats, dateStr, startStr, endStr) {
+      const letters = ["A", "B", "C", "D"];
+      const pattern = examState.closedAnswers
+        .map((ans, idx) => `P${idx + 1}:${ans !== null ? letters[ans] : "-"}`)
+        .join(",");
+
+      const qrPayload = [
+        `INST:FARO DE LUZ`,
+        `DOC:Cristian David Ayazo`,
+        `GRADO:${CONFIG.grade}`,
+        `EST:${examState.studentName}`,
+        `FECHA:${dateStr}`,
+        `HORA:${startStr}-${endStr}`,
+        `NOTA:${stats.finalGrade.toFixed(2)}/5.00`,
+        `BASE:${stats.baseScore.toFixed(2)}`,
+        `PEN:-${stats.totalPenalty.toFixed(2)}(${examState.penalties.length})`,
+        `CONT:${stats.totalAnswered}/15`,
+        `CERR:${stats.correctClosed}/10(Inc:${stats.incorrectClosed})`,
+        `ABI:${stats.validOpen}/5`,
+        `RESP:${pattern}`
+      ].join("|");
+
+      new QRious({
+        element: document.getElementById("qrCanvas"),
+        value: qrPayload,
+        size: 160,
+        level: "M"
+      });
+    }
+
+    function renderResultsBreakdown() {
+      const container = document.getElementById("resultsBreakdownList");
+      container.innerHTML = "";
+      const letters = ["A", "B", "C", "D"];
+
+      QUESTIONS.forEach((q, idx) => {
+        const card = document.createElement("div");
+        card.className = "glass-subcard p-4 rounded-xl border border-white/10 space-y-1.5 text-xs sm:text-sm";
+
+        if (q.type === "closed") {
+          const chosen = examState.closedAnswers[idx];
+          const isCorrect = chosen === q.correctIndex;
+          const chosenText = chosen !== null ? q.options[chosen] : "Sin responder";
+          const correctText = q.options[q.correctIndex];
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-extrabold text-gold-400">Pregunta ${idx + 1} (Cerrada • ${q.topic})</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                isCorrect ? "bg-emerald-500/20 text-emerald-300" : "bg-red-500/20 text-red-300"
+              }">${isCorrect ? "✓ Correcta (+0.37 pts)" : "✗ Incorrecta (0.00 pts)"}</span>
+            </div>
+            <p class="text-slate-200 font-medium">${q.stem}</p>
+            <p class="text-slate-300"><strong>Tu respuesta:</strong> ${chosenText}</p>
+            ${!isCorrect ? `<p class="text-emerald-300"><strong>Respuesta correcta:</strong> ${correctText}</p>` : ""}
+          `;
+        } else {
+          const openIdx = idx - CONFIG.closedCount;
+          const answerText = examState.openAnswers[openIdx] || "";
+          const evalRes = evaluateOpenCoherence(answerText);
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-extrabold text-sky-300">Pregunta ${idx + 1} (Abierta • ${q.topic})</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                evalRes.valid ? "bg-emerald-500/20 text-emerald-300" : "bg-amber-500/20 text-amber-300"
+              }">${evalRes.valid ? "✓ Validada (+0.26 pts)" : "Incompleta (0.00 pts)"}</span>
+            </div>
+            <p class="text-slate-200 font-medium">${q.stem}</p>
+            <div class="bg-navy-900/90 p-3 rounded-lg border border-white/10 text-slate-300 whitespace-pre-wrap">${
+              answerText.trim() ? answerText : "Sin respuesta redactada."
+            }</div>
+          `;
+        }
+        container.appendChild(card);
+      });
+    }
+
+    /*************************************************************************
+     * 14. EXPORTACIÓN DEL REPORTE PDF DETALLADO (jsPDF)
+     *************************************************************************/
+    async function getBannerForPDF() {
+      const imgEl = document.getElementById("mainBannerImg");
+      if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) {
+        try {
+          const c = document.createElement("canvas");
+          c.width = imgEl.naturalWidth;
+          c.height = imgEl.naturalHeight;
+          const ctx = c.getContext("2d");
+          ctx.drawImage(imgEl, 0, 0);
+          return c.toDataURL("image/jpeg", 0.92);
+        } catch (e) {
+          return officialBannerDataURL;
+        }
+      }
+      return officialBannerDataURL;
+    }
+
+    async function generateDetailedPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+      const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
+      const margin = 14;
+      let y = 12;
+
+      const stats = calculateFinalScore();
+      const startStr = examState.startTimestamp.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const endStr = examState.endTimestamp.toLocaleTimeString("es-CO", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const dateStr = examState.endTimestamp.toLocaleDateString("es-CO");
+
+      // 1. Insertar Banner Institucional en el Encabezado
+      const bannerData = await getBannerForPDF();
+      doc.addImage(bannerData, "JPEG", margin, y, pageW - margin * 2, 36);
+      y += 41;
+
+      // 2. Recuadro de Resumen Ejecutivo y Código QR
+      doc.setFillColor(8, 27, 56);
+      doc.roundedRect(margin, y, pageW - margin * 2, 48, 3, 3, "F");
+      doc.setDrawColor(200, 157, 40);
+      doc.setLineWidth(0.6);
+      doc.roundedRect(margin, y, pageW - margin * 2, 48, 3, 3, "S");
+
+      doc.setTextColor(222, 179, 60);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text("REPORTE OFICIAL DE EVALUACIÓN - GRADO 8° (TROPISMOS Y NASTIAS)", margin + 4, y + 7);
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9.5);
+      doc.text(`Estudiante: ${examState.studentName}`, margin + 4, y + 14);
+      doc.text(`Docente: ${CONFIG.docente} | Asignatura: ${CONFIG.subject}`, margin + 4, y + 20);
+      doc.text(`Fecha: ${dateStr} | Inicio: ${startStr} | Finalización: ${endStr}`, margin + 4, y + 26);
+      doc.text(`Preguntas Contestadas: ${stats.totalAnswered} de 15 (10 Cerradas y 5 Abiertas)`, margin + 4, y + 32);
+      doc.text(`Cerradas Correctas: ${stats.correctClosed}/10 (${stats.closedScore.toFixed(2)} pts) | Incorrectas: ${stats.incorrectClosed}/10`, margin + 4, y + 38);
+      doc.text(`Abiertas Validadas: ${stats.validOpen}/5 (${stats.openScore.toFixed(2)} pts) | Penalizaciones: -${stats.totalPenalty.toFixed(2)} pts`, margin + 4, y + 44);
+
+      // Nota Final Destacada y QR
+      doc.setFillColor(200, 157, 40);
+      doc.roundedRect(pageW - margin - 68, y + 6, 30, 18, 2, 2, "F");
+      doc.setTextColor(8, 27, 56);
+      doc.setFontSize(8);
+      doc.text("NOTA FINAL", pageW - margin - 53, y + 12, { align: "center" });
+      doc.setFontSize(13);
+      doc.text(`${stats.finalGrade.toFixed(2)}`, pageW - margin - 53, y + 20, { align: "center" });
+
+      const qrCanvas = document.getElementById("qrCanvas");
+      if (qrCanvas) {
+        const qrDataUrl = qrCanvas.toDataURL("image/png");
+        doc.addImage(qrDataUrl, "PNG", pageW - margin - 35, y + 5, 31, 31);
+      }
+
+      y += 54;
+
+      // 3. Historial de Penalizaciones
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(8, 27, 56);
+      doc.text("HISTORIAL DE SUPERVISIÓN Y PENALIZACIONES ANTIFRAUDE:", margin, y);
+      y += 5;
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      if (examState.penalties.length === 0) {
+        doc.setTextColor(5, 150, 105);
+        doc.text("• Sin infracciones registradas. El estudiante mantuvo pantalla completa y silencio reglamentario.", margin + 2, y);
+        y += 6;
+      } else {
+        doc.setTextColor(185, 28, 28);
+        examState.penalties.forEach((p, idx) => {
+          if (y > pageH - 20) {
+            doc.addPage();
+            y = 15;
+          }
+          doc.text(`${idx + 1}. [${p.time}] ${p.reason} (-${p.points.toFixed(1)} pts)`, margin + 2, y);
+          y += 5;
+        });
+        y += 2;
+      }
+
+      // 4. Desglose Detallado Pregunta por Pregunta (1 a 15)
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10.5);
+      doc.setTextColor(8, 27, 56);
+      doc.text("DESGLOSE DETALLADO DE RESPUESTAS (10 CERRADAS Y 5 ABIERTAS):", margin, y);
+      y += 6;
+
+      QUESTIONS.forEach((q, idx) => {
+        if (y > pageH - 42) {
+          doc.addPage();
+          y = 15;
+        }
+
+        doc.setDrawColor(203, 213, 225);
+        doc.line(margin, y, pageW - margin, y);
+        y += 5;
+
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9.5);
+        doc.setTextColor(21, 56, 102);
+
+        if (q.type === "closed") {
+          const chosen = examState.closedAnswers[idx];
+          const isCorrect = chosen === q.correctIndex;
+          const statusLabel = isCorrect ? "[CORRECTA +0.37 pts]" : "[INCORRECTA 0.00 pts]";
+          doc.text(`Pregunta ${idx + 1} (Cerrada - ${q.topic}) ${statusLabel}`, margin, y);
+          y += 4.5;
+
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(8.5);
+          doc.setTextColor(30, 41, 59);
+          const stemLines = doc.splitTextToSize(`Enunciado: ${q.stem}`, pageW - margin * 2);
+          doc.text(stemLines, margin, y);
+          y += stemLines.length * 4 + 1;
+
+          const chosenText = chosen !== null ? q.options[chosen] : "Sin responder";
+          const chosenLines = doc.splitTextToSize(`Respuesta elegida: ${chosenText}`, pageW - margin * 2);
+          doc.setTextColor(isCorrect ? 5 : 185, isCorrect ? 150 : 28, isCorrect ? 105 : 28);
+          doc.text(chosenLines, margin, y);
+          y += chosenLines.length * 4 + 1;
+
+          if (!isCorrect) {
+            doc.setTextColor(5, 150, 105);
+            const corrLines = doc.splitTextToSize(`Opción correcta: ${q.options[q.correctIndex]}`, pageW - margin * 2);
+            doc.text(corrLines, margin, y);
+            y += corrLines.length * 4 + 1;
+          }
+          y += 2;
+        } else {
+          const openIdx = idx - CONFIG.closedCount;
+          const ansText = (examState.openAnswers[openIdx] || "").trim() || "Sin respuesta redactada por el estudiante.";
+          const evalRes = evaluateOpenCoherence(ansText);
+          const statusLabel = evalRes.valid ? "[VALIDADA +0.26 pts]" : "[INCOMPLETA 0.00 pts]";
+
+          doc.text(`Pregunta ${idx + 1} (Abierta - ${q.topic}) ${statusLabel}`, margin, y);
+          y += 4.5;
+
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(8.5);
+          doc.setTextColor(30, 41, 59);
+          const stemLines = doc.splitTextToSize(`Enunciado: ${q.stem}`, pageW - margin * 2);
+          doc.text(stemLines, margin, y);
+          y += stemLines.length * 4 + 1.5;
+
+          doc.setFont("helvetica", "italic");
+          doc.setTextColor(15, 23, 42);
+          const answerLines = doc.splitTextToSize(`Texto redactado por el estudiante (${evalRes.words} palabras): "${ansText}"`, pageW - margin * 2);
+
+          answerLines.forEach(line => {
+            if (y > pageH - 16) {
+              doc.addPage();
+              y = 15;
+            }
+            doc.text(line, margin + 2, y);
+            y += 4;
+          });
+          y += 3;
+        }
+      });
+
+      const cleanName = examState.studentName.replace(/[^a-zA-Z0-9]/g, "_");
+      doc.save(`Reporte_8_Tropismos_Nastias_${cleanName}.pdf`);
+      showToast("📄 Reporte PDF descargado exitosamente.", "success");
+    }
+
+    /*************************************************************************
+     * 15. SISTEMA DE NOTIFICACIONES FLOTANTES (TOASTS EN DOM)
+     *************************************************************************/
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+
+      let colors = "bg-navy-800 border-gold-500 text-white";
+      if (type === "error") colors = "bg-red-950/95 border-red-400 text-red-100";
+      if (type === "success") colors = "bg-emerald-950/95 border-emerald-400 text-emerald-100";
+      if (type === "warning") colors = "bg-amber-950/95 border-amber-400 text-amber-100";
+
+      toast.className = `p-3.5 rounded-xl border-l-4 shadow-2xl backdrop-blur-md text-xs sm:text-sm font-semibold transition-all duration-300 ${colors}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => toast.remove(), 300);
+      }, 4200);
+    }
+
+    // Inicialización al cargar el documento
+    window.addEventListener("DOMContentLoaded", () => {
+      setupBanners();
+      updateLiveClock();
+      setInterval(updateLiveClock, 1000);
+    });
+  </script>
+</body>
+</html>
